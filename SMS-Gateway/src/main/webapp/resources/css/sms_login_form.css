@@ -1,0 +1,72 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 6, 2014, 12:04:42 PM
+    Author     : Deni Husni FR
+*/
+
+body{margin:0 auto;
+     /*     padding:0;color:#142b30;
+          background-color:#a4d0da;*/
+     /*background-image:url('../images/skulls.png');*/
+     background-repeat:repeat;
+     background-attachment:fixed;
+     background-position:top left}
+root{display:block}
+#header_box{
+    top: 50%;
+    position: fixed;
+    margin-top: 100px!important;
+}
+
+.panelMenu{
+    background-color:#000000 !important;
+    background-image:none!important;
+    background-repeat:repeat-x;
+    /*margin-top: -8px!important;*/
+    /*margin-left: -8px!important;*/
+    /*margin-right:  -8px!important;*/
+    border-top-left-radius:0px;
+    border-top-right-radius:0px;
+    border-bottom-left-radius:0!important;
+    border-bottom-right-radius:0!important;
+    border:0px;
+    height:30px!important;
+    font-family:Lucida Sans!important;
+    font-size: 18px!important;}
+
+
+#header_login {
+    background: none repeat scroll 0 0 #000000;
+    box-shadow: 0 -1px rgba(255,255,255,.05) inset,0 1px rgba(0,0,0,.05);
+    position: relative;
+    text-align: left;
+    text-shadow: 0 1px rgba(0,0,0,.1);
+    z-index: 1;
+    height: 45px;
+    color: #fff;
+    font-family: Trebuchet MS;
+    /*    margin-left: -8px;
+        margin-right:  -8px;
+        margin-top: -8px;*/
+}
+
+#header_login_left{float:left;padding:10px 0 0 4px;font-size:16px!important}
+
+#header_menu {
+    background: none repeat scroll 0 0 #cccccc;
+    box-shadow: 0 -1px rgba(255,255,255,.05) inset,0 1px rgba(0,0,0,.05);
+    position: relative;
+    text-align: left;
+    text-shadow: 0 1px rgba(0,0,0,.1);
+    z-index: 1;
+    height: 45px;
+    color: #fff;
+    font-family: Trebuchet MS;
+    /*    margin-left: -8px;
+        margin-right:  -8px;
+        margin-top: -8px;*/
+}

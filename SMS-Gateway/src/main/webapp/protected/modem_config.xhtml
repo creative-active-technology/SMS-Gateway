@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_form.css" type="text/css" media="screen" />
+    </h:head>
+    <h:body>
+        <h:form>
+            <!--                    <p:menubar  styleClass="panelMenu" autoDisplay="false" id="menuId">
+                                    <p:menuitem value="Home" url="/protected/home.htm"  title="Back to Home" style="font-size: 12px !important;font-weight: normal!important;color: white" />  
+                                </p:menubar>  -->
+            <div id="header_login">
+                <div id="header_login_left">
+                    <!--<h:panelGrid>-->
+                    <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold"/> 
+                    <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/> 
+                    <!--<p:outputLabel value="PT. Indonesia Inkubator " style="font-size: 12px !important;font-family: Trebuchet MS"/>-->
+                    <!--</h:panelGrid>-->
+                </div>
+                <div style="float: right;padding-top: 7px;margin-right: 5px">
+                    <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                </div>
+
+            </div>
+            <div id="header_menu" style="margin-bottom: 10px">
+                <div align="left" style="font-size: 12px;margin-left: 5px;padding-top: 7px">
+                    <p:commandButton value="Kirim SMS"  title="Kirim SMS"/>
+                    <p:commandButton value="Scheduller SMS"  title="Scheduller SMS"/>
+                    <p:commandButton value="SMS History"  title="SMS History"/>
+                    <p:commandButton value="Modem Config" title="Modem Config"/>
+                </div>
+            </div>
+            <!--<p:separator style="margin-bottom: 20px"/>-->
+            <p:outputLabel value="Konfigurasi Modem" style="font-size: 16px;margin-left: 10px;font-weight: bold;color: #006600" />
+            <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px">   
+                <h:panelGrid columns="2" style="margin-bottom: 7px" cellpadding="2" cellspacing="3">
+                    <p:outputLabel value="Modem ID" for="modemId"/>
+                    <p:outputLabel value="Com Name" for="comId"/>
+                    <p:inputText value=""  placeholder="Misal : modem1" id="modemId" required="true" maxlength="45"/>
+                    <p:inputText value="" placeholder="Misal : COM3"  id="comId" required="true" maxlength="45"/>
+
+                    <p:outputLabel value="PIN Number"/>
+                    <p:outputLabel value="Baud Rate"/>
+                    <p:inputText value="" placeholder="Misal : 1234"/>
+                    <p:inputText value="" placeholder="Kecepatan Transfer Data" />
+
+
+                    <p:outputLabel value="Model"/>
+                    <p:outputLabel value="Manufactur"/>
+                    <p:inputText value="" placeholder="Misal : MF1200"/>
+                    <p:inputText value=""  placeholder="Misal : WaveCom"/>
+
+                    <p:outputLabel value="Price Per SMS"/>
+                    <p:outputLabel value="Current Pulsa Value"/>
+                    <pe:inputNumber value="" />
+                    <pe:inputNumber value="" />
+                </h:panelGrid>
+                <p:commandButton value="Save" />
+                <p:commandButton value="Batal" />
+            </div>
+            <div style="width: 100%;font-size: 12px">   
+
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

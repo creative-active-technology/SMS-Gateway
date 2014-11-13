@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_form.css" type="text/css" media="screen" />
+    </h:head>
+    <h:body>
+        <h:form>
+            <!--                    <p:menubar  styleClass="panelMenu" autoDisplay="false" id="menuId">
+                                    <p:menuitem value="Home" url="/protected/home.htm"  title="Back to Home" style="font-size: 12px !important;font-weight: normal!important;color: white" />  
+                                </p:menubar>  -->
+            <div id="header_login">
+                <div id="header_login_left">
+                    <!--<h:panelGrid>-->
+                    <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold"/> 
+                    <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/> 
+                    <!--<p:outputLabel value="PT. Indonesia Inkubator " style="font-size: 12px !important;font-family: Trebuchet MS"/>-->
+                    <!--</h:panelGrid>-->
+                </div>
+                <div style="float: right;padding-top: 7px;margin-right: 5px">
+                    <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                </div>
+
+            </div>
+            <div id="header_menu" style="margin-bottom: 10px">
+                <div align="left" style="font-size: 12px;margin-left: 5px;padding-top: 7px">
+                    <p:commandButton value="Kirim SMS"  title="Kirim SMS"/>
+                    <p:commandButton value="Scheduller SMS"  title="Scheduller SMS"/>
+                    <p:commandButton value="SMS History"  title="SMS History"/>
+                    <p:commandButton value="Modem Config" title="Modem Config" action="#{homeController.doRedirectModemConfig()}"/>
+                </div>
+            </div>
+            <!--<p:separator style="margin-bottom: 20px"/>-->
+            <p:outputLabel value="Riwayat Pengiriman SMS" style="font-size: 16px;margin-left: 10px;font-weight: bold;color: #006600" />
+            <div style="font-size: 12px;margin-left: 5px;margin-top: 10px">   
+                <h:panelGrid style="margin-bottom: 5px" columns="4">
+                    <p:outputLabel value="Tanggal Kirim" style="font-weight: bold"/>
+                    <p:outputLabel value="Pengirim" style="font-weight: bold"/>
+                    <p:outputLabel value="Tujuan" style="font-weight: bold"/>
+                    <p:outputLabel/>
+                    <p:calendar style="font-size: 12px" /> 
+                    <p:inputText/>
+                    <p:inputText/>
+                    <p:commandButton value="Cari Data"  style="font-size: 12px"/>
+                </h:panelGrid>
+
+            </div>
+            <div style="width: 100%;font-size: 12px">   
+                <p:dataTable style="margin-top: 10px;padding-right: 5px;padding-left: 5px" value="#{homeController.dataTableSMSActivities}" var="smsActivity" rowIndexVar="no" >
+                    <p:column style="text-align: center;width: 3%;">
+                        <f:facet name="header">  
+                            <h:outputText value="No."  />
+                        </f:facet>
+                        <h:outputLabel value="#{no+1}." />
+                    </p:column>
+                    <p:column sortBy="fromSms" >
+                        <f:facet name="header">  
+                            <h:outputText value="SMS Dari"/>
+                        </f:facet>
+                        <h:outputLabel value= "#{smsActivity.fromSms}"/>
+                    </p:column>
+                    <p:column sortBy="destination" >
+                        <f:facet name="header">  
+                            <h:outputText value="SMS Ke"/>
+                        </f:facet>
+                        <h:outputLabel value= "#{smsActivity.destination}"/>
+                    </p:column>
+                    <p:column sortBy="contentSms" style="text-align: center">
+                        <f:facet name="header">  
+                            <h:outputText value="Isi SMS"/>
+                        </f:facet>
+                        <h:outputLabel value= "Lihat Isi SMS"/>
+                    </p:column>
+                    <p:column sortBy="contentSms" style="text-align: center">
+                        <f:facet name="header">  
+                            <h:outputText value="Tanggal Kirim"/>
+                        </f:facet>
+                        <p:outputLabel value= "#{smsActivity.sendDate}">
+                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column sortBy="contentSms" style="text-align: center">
+                        <f:facet name="header">  
+                            <h:outputText value="Waktu Kirim"/>
+                        </f:facet>
+                        <h:outputLabel value= "#{smsActivity.sendTime}"/>
+                    </p:column>
+                    <p:column sortBy="contentSms" style="text-align: center">
+                        <f:facet name="header">  
+                            <h:outputText value="Scheduller SMS"/>
+                        </f:facet>
+                        <p:outputLabel value= "#{smsActivity.isSchedule}">
+                            <f:converter converterId="booleanMessageConverter"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column sortBy="contentSms" style="text-align: center">
+                        <f:facet name="header">  
+                            <h:outputText value="SMS Terkirm"/>
+                        </f:facet>
+                        <p:outputLabel value= "#{smsActivity.isSend}">
+                            <f:converter converterId="booleanMessageConverter"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+
