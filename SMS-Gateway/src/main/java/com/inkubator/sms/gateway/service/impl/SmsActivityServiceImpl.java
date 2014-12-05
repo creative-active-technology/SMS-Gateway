@@ -5,14 +5,25 @@
  */
 package com.inkubator.sms.gateway.service.impl;
 
+import com.inkubator.common.notification.model.SMSSend;
+import com.inkubator.common.util.JsonConverter;
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.dao.ModemDefinitionDao;
 import com.inkubator.sms.gateway.dao.SmsActivityDao;
+import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.entity.SmsActivity;
 import com.inkubator.sms.gateway.service.SmsActivityService;
+import com.inkubator.sms.gateway.web.model.SmsSendModel;
+import java.util.Date;
 import java.util.List;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,6 +39,12 @@ public class SmsActivityServiceImpl extends IServiceImpl implements SmsActivityS
 
     @Autowired
     private SmsActivityDao smsActivityDao;
+    @Autowired
+    private ModemDefinitionDao modemDefinitionDao;
+    @Autowired
+    private JmsTemplate jmsTemplateSMS;
+    @Autowired
+    private JsonConverter jsonConverter;
 
     @Override
     public SmsActivity getEntiyByPK(String id) throws Exception {
@@ -152,7 +169,7 @@ public class SmsActivityServiceImpl extends IServiceImpl implements SmsActivityS
     @Override
     @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
     public List<SmsActivity> getAllData() throws Exception {
-       return this.smsActivityDao.getAllData();
+        return this.smsActivityDao.getAllData();
     }
 
     @Override
@@ -188,6 +205,43 @@ public class SmsActivityServiceImpl extends IServiceImpl implements SmsActivityS
     @Override
     public List<SmsActivity> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void sendSms(SmsSendModel ssm) throws Exception {
+        ModemDefinition modemDefinition = this.modemDefinitionDao.getEntiyByPK(ssm.getModemId());
+        double hargaPerSms = modemDefinition.getPricePerSms();
+        List<String> toLoop = ssm.getListPhone();
+        for (String toLoop1 : toLoop) {
+            final SMSSend smss = new SMSSend();
+            smss.setPricePerSms(hargaPerSms);
+            smss.setContent(ssm.getSmsContent());
+            smss.setFrom("System");
+            smss.setDestination(toLoop1);
+            smss.setModemId(modemDefinition.getModemId());
+            this.jmsTemplateSMS.send(new MessageCreator() {
+                @Override
+                public Message createMessage(Session session)
+                        throws JMSException {
+                    return session.createTextMessage(jsonConverter.getJson(smss));
+                }
+            });
+
+//            OutboundMessage msg = new OutboundMessage(toLoop1, ssm.getSmsContent());
+//            org.smslib.Service.getInstance().sendMessage(msg, modemDefinition.getModemId());
+        }
+//        OutboundMessage msg = new OutboundMessage("+6287887051607", "Test UP");
+//        org.smslib.Service.getInstance().sendMessage(msg);
+
+    }
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS, isolation = Isolation.REPEATABLE_READ, timeout = 50)
+    public List<SmsActivity> getListBySendDate(Date date) throws Exception {
+//        return this.smsActivityDao.getListBySendDate(date);
+        return this.smsActivityDao.getAllByLucenSendDate(date);
+
     }
 
 }

@@ -22,6 +22,7 @@ public class ModemDefinitionModel implements Serializable {
     private String smscNumber;
     private Double pricePerSms;
     private Double currentValue;
+    private Integer baudRate;
 
     public Long getId() {
         return id;
@@ -93,6 +94,14 @@ public class ModemDefinitionModel implements Serializable {
 
     public void setCurrentValue(Double currentValue) {
         this.currentValue = currentValue;
+    }
+
+    public Integer getBaudRate() {
+        return baudRate;
+    }
+
+    public void setBaudRate(Integer baudRate) {
+        this.baudRate = baudRate;
     }
     
 

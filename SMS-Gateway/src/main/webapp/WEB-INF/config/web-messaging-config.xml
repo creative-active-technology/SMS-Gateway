@@ -12,7 +12,7 @@
 ">
 
     
-<!--    <bean id="connectionFactoryExpose" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <bean id="connectionFactoryExpose" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="tcp://localhost:61616" />
         <property name="prefetchPolicy">
             <bean class="org.apache.activemq.ActiveMQPrefetchPolicy">
@@ -26,7 +26,7 @@
                 <property name="useExponentialBackOff" value="false"/>
             </bean>
         </property>
-    </bean>-->
+    </bean>
     <bean id="connectionFactoryComsume" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="nio://localhost:61616" />
         <property name="prefetchPolicy">
@@ -42,6 +42,13 @@
             </bean>
         </property>
     </bean>
+    
+     <bean id="jmsTemplateSMS" class="org.springframework.jms.core.JmsTemplate" lazy-init="true">
+        <constructor-arg name="connectionFactory" ref="connectionFactoryExpose"/>
+        <property name="sessionTransacted" value="true"/>
+        <property name="defaultDestinationName" value="smsNotifiacation"/>
+                
+    </bean> 
 <!--    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate" lazy-init="true">
         <constructor-arg name="connectionFactory" ref="connectionFactoryExpose"/>
         <property name="sessionTransacted" value="true"/>
@@ -91,7 +98,7 @@
     </bean> -->
     
 
-<!--    <bean id="notificationUserMessagesListener" class="com.inkubator.hrm.service.impl.NotificationUserMessagesListener" lazy-init="true">
+    <!--    <bean id="notificationUserMessagesListener" class="com.inkubator.hrm.service.impl.NotificationUserMessagesListener" lazy-init="true">
         <property name="applicationUrl" value="${email_param_application_url}"/>
         <property name="applicationName" value="${email_param_application_name}"/>
         <property name="ownerEmail" value="${email_param_owner_email}"/>
@@ -99,7 +106,7 @@
         <property name="ownerAdministrator" value="${email_param_owner_administrator}"/>
     </bean>-->
     <bean id="smsMessagesListener" class="com.inkubator.sms.gateway.service.impl.SmsMessagesListener" lazy-init="true"/>
-<!--    <bean id="notificationApprovalMessagesListener" class="com.inkubator.hrm.service.impl.NotificationApprovalMessagesListener" lazy-init="true">
+    <!--    <bean id="notificationApprovalMessagesListener" class="com.inkubator.hrm.service.impl.NotificationApprovalMessagesListener" lazy-init="true">
         <property name="applicationUrl" value="${email_param_application_url}"/>
         <property name="applicationName" value="${email_param_application_name}"/>
         <property name="ownerEmail" value="${email_param_owner_email}"/>
@@ -117,5 +124,5 @@
     <bean id="jsmTransaction" class="org.springframework.jms.connection.JmsTransactionManager">
         <property name="connectionFactory" ref="connectionFactoryComsume"/>
     </bean>
-      <bean id="sMSServiceUtil" class="com.inkubator.common.notification.util.SMSServiceUtil" lazy-init="false"/>
+    <bean id="sMSServiceUtil" class="com.inkubator.common.notification.util.SMSServiceUtil" lazy-init="false"/>
 </beans>

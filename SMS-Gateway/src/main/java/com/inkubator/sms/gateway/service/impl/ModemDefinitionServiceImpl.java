@@ -5,15 +5,21 @@
  */
 package com.inkubator.sms.gateway.service.impl;
 
+import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.BussinessException;
 import com.inkubator.sms.gateway.dao.ModemDefinitionDao;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.service.ModemDefinitionService;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -37,18 +43,45 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
     }
 
     @Override
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
     public ModemDefinition getEntiyByPK(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.modemDefinitionDao.getEntiyByPK(id);
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(ModemDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        long totalDuplicate = this.modemDefinitionDao.getTotalByModemId(entity.getModemId());
+        if (totalDuplicate > 0) {
+            throw new BussinessException("Data dengan modem id :" + entity.getModemId() + " telah ada di database. Silahkan pilih modem id yang lain");
+        }
+        entity.setId(Long.parseLong(RandomNumberUtil.getRandomNumber(9)));
+//        entity.setCreatedBy(UserInfoUtil.getUserName());
+        entity.setCreatedBy("System");
+        entity.setCreatedOn(new Date());
+        this.modemDefinitionDao.save(entity);
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(ModemDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        long totalDuplicate = this.modemDefinitionDao.getTotalByModemIdAndNotId(entity.getModemId(), entity.getId());
+        if (totalDuplicate > 0) {
+            throw new BussinessException("Data dengan modem id :" + entity.getModemId() + " telah ada di database. Silahkan pilih modem id yang lain");
+        }
+        ModemDefinition definition = this.modemDefinitionDao.getEntiyByPK(entity.getId());
+        definition.setBaudRate(entity.getBaudRate());
+        definition.setComId(entity.getComId());
+        definition.setCurrentValue(entity.getCurrentValue());
+        definition.setManufacture(entity.getManufacture());
+        definition.setModel(entity.getModel());
+        definition.setModemId(entity.getModemId());
+        definition.setPinNumber(entity.getPinNumber());
+        definition.setPricePerSms(entity.getPricePerSms());
+        definition.setSmscNumber(entity.getSmscNumber());
+        definition.setUpdatedBy("System");
+        definition.setUpdatedOn(new Date());
+        this.modemDefinitionDao.update(definition);
     }
 
     @Override
@@ -117,8 +150,9 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(ModemDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.modemDefinitionDao.delete(entity);
     }
 
     @Override
@@ -147,8 +181,9 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
     }
 
     @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
     public List<ModemDefinition> getAllData() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.modemDefinitionDao.getAllData();
     }
 
     @Override

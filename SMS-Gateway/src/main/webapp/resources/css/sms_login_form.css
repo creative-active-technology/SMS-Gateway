@@ -70,3 +70,30 @@ root{display:block}
         margin-right:  -8px;
         margin-top: -8px;*/
 }
+.ui-growl-title
+{
+    font:18px "Lucida Console"!important;
+    color:#900;
+    text-align:left
+}
+.ui-growl-message p
+{
+    font:12px Verdana!important;
+    color:#036
+}
+.ui-growl
+{
+    position:fixed;
+    top:7%;
+    right: 1%;
+}
+
+.ui-widget,.ui-widget .ui-widget,.ui-widget input,.ui-inputfield
+{
+    font-size:13px;
+    /*font-family: Calibri;*/
+}
+
+
+
+

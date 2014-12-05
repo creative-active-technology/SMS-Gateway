@@ -12,6 +12,9 @@ import com.inkubator.sms.gateway.entity.ModemDefinition;
  *
  * @author Deni Husni FR
  */
-public interface ModemDefinitionDao extends IDAO<ModemDefinition>{
-    
+public interface ModemDefinitionDao extends IDAO<ModemDefinition> {
+
+    public Long getTotalByModemId(String modemId);
+
+    public long getTotalByModemIdAndNotId(String modemId,Long id);
 }

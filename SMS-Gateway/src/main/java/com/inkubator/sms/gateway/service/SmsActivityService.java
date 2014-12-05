@@ -7,11 +7,17 @@ package com.inkubator.sms.gateway.service;
 
 import com.inkubator.datacore.service.IService;
 import com.inkubator.sms.gateway.entity.SmsActivity;
+import com.inkubator.sms.gateway.web.model.SmsSendModel;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author Deni Husni FR
  */
-public interface SmsActivityService extends IService<SmsActivity>{
-    
+public interface SmsActivityService extends IService<SmsActivity> {
+
+    public void sendSms(SmsSendModel ssm) throws Exception;
+
+    public List<SmsActivity> getListBySendDate(Date date) throws Exception;
 }

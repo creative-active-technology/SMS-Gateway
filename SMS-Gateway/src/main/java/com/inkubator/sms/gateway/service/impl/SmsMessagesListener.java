@@ -55,10 +55,11 @@ public class SmsMessagesListener extends IServiceImpl implements MessageListener
             activity.setIsSend(true);
             activity.setSendDate(new Date());
             activity.setSendTime(new Date());
+            activity.setPriceSms(smss.getPricePerSms());
             smsActivityDao.save(activity);
             OutboundMessage msg = new OutboundMessage(smss.getDestination(), smss.getContent());
             msg.setFlashSms(false);
-            Service.getInstance().sendMessage(msg);
+            Service.getInstance().sendMessage(msg,smss.getModemId());
             LOGGER.info("Sending SMS Done");
         } catch (JMSException | NumberFormatException | TimeoutException | GatewayException | IOException | InterruptedException ex) {
             LOGGER.error("Error", ex);
