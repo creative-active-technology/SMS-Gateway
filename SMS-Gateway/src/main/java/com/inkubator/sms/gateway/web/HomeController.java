@@ -56,4 +56,8 @@ public class HomeController extends BaseController {
     public String doRedirectSms() {
         return "/protected/sending_sms.htm?faces-redirect=true";
     }
+    
+    public String doRedirectSchedullerSms(){
+        return "/protected/scheduller_sms.htm?faces-redirect=true";
+    }
 }

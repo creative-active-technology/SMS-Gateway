@@ -30,13 +30,13 @@ public class TaskDefinition  implements java.io.Serializable {
      private Integer version;
      private ModemDefinition modemDefinition;
      private String name;
-     private String scheduleType;
+     private String scheduleType;// continu repeate
      private Date date;
      private Date time;
      private String destination;
      private String fromSending;
      private String smsContent;
-     private String isRepeatOnCondition;
+     private String isRepeatOnCondition;// 
      private Integer repeatTime;
      private String createdBy;
      private Date cretedOn;
