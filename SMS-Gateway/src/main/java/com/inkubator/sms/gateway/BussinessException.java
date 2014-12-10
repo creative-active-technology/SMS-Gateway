@@ -1,9 +1,5 @@
 package com.inkubator.sms.gateway;
 
-import java.util.ResourceBundle;
-
-import org.springframework.context.i18n.LocaleContextHolder;
-
 /**
  *
  * @author rizkykojek

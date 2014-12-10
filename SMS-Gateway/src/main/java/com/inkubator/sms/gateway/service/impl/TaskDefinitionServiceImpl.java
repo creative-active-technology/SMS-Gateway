@@ -5,15 +5,21 @@
  */
 package com.inkubator.sms.gateway.service.impl;
 
+import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.dao.ModemDefinitionDao;
 import com.inkubator.sms.gateway.dao.TaskDefinitionDao;
 import com.inkubator.sms.gateway.entity.TaskDefinition;
 import com.inkubator.sms.gateway.service.TaskDefinitionService;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -25,6 +31,8 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
 
     @Autowired
     private TaskDefinitionDao taskDefinitionDao;
+    @Autowired
+    private ModemDefinitionDao modemDefinitionDao;
 
     @Override
     public TaskDefinition getEntiyByPK(String id) throws Exception {
@@ -42,8 +50,13 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(TaskDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        entity.setModemDefinition(modemDefinitionDao.getEntiyByPK(entity.getModemDefinition().getId()));
+        entity.setId(Long.parseLong(RandomNumberUtil.getRandomNumber(12)));
+        entity.setCreatedBy("System");
+        entity.setCretedOn(new Date());
+        this.taskDefinitionDao.save(entity);
     }
 
     @Override
@@ -184,6 +197,18 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     @Override
     public List<TaskDefinition> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<TaskDefinition> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) throws Exception {
+        return this.taskDefinitionDao.getAllByFullTextService(parameter, minResult, maxResult, order);
+    }
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
+    public Integer getTotalByFullTextService(String parameter) throws Exception {
+        return this.taskDefinitionDao.getTotalByFullTextService(parameter);
     }
 
 }

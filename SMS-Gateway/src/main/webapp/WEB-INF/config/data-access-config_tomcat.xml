@@ -76,7 +76,7 @@
                 <prop key="hibernate.order_updates">true</prop>
                 <prop key="hibernate.current_session_context_class">com.inkubator.datacore.util.TransactionAwareSessionContext</prop>
                 <prop key="hibernate.search.default.directory_provider">filesystem</prop>
-                <prop key="hibernate.search.default.indexBase">C:/LucenIndex</prop>
+                <prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>
 
                 <!--                <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>

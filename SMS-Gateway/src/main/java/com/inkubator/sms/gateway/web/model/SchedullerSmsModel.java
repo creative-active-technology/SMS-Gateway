@@ -6,7 +6,10 @@
 package com.inkubator.sms.gateway.web.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -21,10 +24,12 @@ public class SchedullerSmsModel implements Serializable {
     private Date sendDate;
     private Date sendTime;
     private String destination;
+    private List<String> listPhone = new ArrayList<>();
     private String fromSending;
     private String smsContent;
     private String isRepeatOnCondition;// 
     private Integer repeatTime;
+    private String listPhoneAsString;
 
     public Long getId() {
         return id;
@@ -74,6 +79,7 @@ public class SchedullerSmsModel implements Serializable {
         this.sendTime = sendTime;
     }
 
+    @Pattern(regexp = "^[+][\\d() -]+", message = "Bukan Format No HP")
     public String getDestination() {
         return destination;
     }
@@ -112,6 +118,22 @@ public class SchedullerSmsModel implements Serializable {
 
     public void setRepeatTime(Integer repeatTime) {
         this.repeatTime = repeatTime;
+    }
+
+    public List<String> getListPhone() {
+        return listPhone;
+    }
+
+    public void setListPhone(List<String> listPhone) {
+        this.listPhone = listPhone;
+    }
+
+    public String getListPhoneAsString() {
+        return listPhoneAsString;
+    }
+
+    public void setListPhoneAsString(String listPhoneAsString) {
+        this.listPhoneAsString = listPhoneAsString;
     }
 
 }
