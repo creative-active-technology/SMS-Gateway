@@ -26,14 +26,22 @@
     <tx:annotation-driven/>
     
     <!-- Enables the caching on annotated class, the context is in service, the implementation using ehcache  -->
-<!--    <cache:annotation-driven />
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
-          p:cacheManager-ref="ehcache"/>
-    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
-          p:configLocation="classpath:spring/spring_ehcache.xml" 
-          p:shared="true"/>-->
+    <!--    <cache:annotation-driven />
+<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
+    p:cacheManager-ref="ehcache"/>
+<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
+    p:configLocation="classpath:spring/spring_ehcache.xml" 
+    p:shared="true"/>-->
              
-          
+    <bean id="mainDataSource"  class="com.zaxxer.hikari.HikariDataSource" destroy-method="shutdown">
+        <property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" />
+        <property name="connectionTestQuery" value="SELECT 1" />
+        <property name="username" value="${jdbc.userName}"/>
+        <property name="password" value="${jdbc.password}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        
+    </bean>
+    
     <bean id="c3p0DataSourceAbstract" class="com.mchange.v2.c3p0.ComboPooledDataSource" 
           abstract="true" destroy-method="close">
         <property name="acquireIncrement" value="5"/>
@@ -75,9 +83,10 @@
                 <prop key="hibernate.order_inserts">true</prop>
                 <prop key="hibernate.order_updates">true</prop>
                 <prop key="hibernate.current_session_context_class">com.inkubator.datacore.util.TransactionAwareSessionContext</prop>
-                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
-                <prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>
-
+                <!--                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
+                <prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>-->
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.FSDirectoryProvider</prop>
+                <prop key="hibernate.search.default.indexDir">/home/denifahri/lucen</prop>
                 <!--                <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
@@ -85,10 +94,14 @@
                 <prop key="hibernate.cache.provider_configuration_file_resource_path">hibernate_ehcache.xml</prop>
                 <prop key="hibernate.generate_statistics">true</prop>
                 <prop key="org.hibernate.envers.audit_table_suffix">_audit</prop>-->
+<!--                <prop key="hibernate.hikari.dataSource.cachePrepStmts">true</prop>
+                <prop key="hibernate.hikari.dataSource.prepStmtCacheSize">250</prop>
+                <prop key="hibernate.hikari.dataSource.prepStmtCacheSqlLimit">2048</prop>
+                <prop key="hibernate.hikari.dataSource.useServerPrepStmts">true</prop>-->
             </props>
         </property>
     </bean>
-      <bean id="indexLucen" class="com.inkubator.sms.gateway.service.impl.IndexingLucen" lazy-init="false" init-method="indexAll" />
+    <bean id="indexLucen" class="com.inkubator.sms.gateway.service.impl.IndexingLucen" lazy-init="false" init-method="indexAll" />
     <bean class="org.springframework.orm.hibernate4.HibernateTransactionManager" id="transactionManager" lazy-init="true">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

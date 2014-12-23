@@ -19,4 +19,6 @@ public interface TaskDefinitionDao extends IDAO<TaskDefinition> {
     public List<TaskDefinition> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order);
 
     public Integer getTotalByFullTextService(String parameter);
+
+    public TaskDefinition getByFullText(Long id);
 }

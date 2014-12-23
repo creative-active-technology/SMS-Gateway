@@ -17,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
@@ -50,6 +51,8 @@ public class ModemDefinition implements java.io.Serializable {
     private Double currentValue;
     private Integer baudRate;
     private Boolean isConnected;
+    private String phoneNumber;
+    private String checkPulsa;
     private Set<TaskDefinition> taskDefinitions = new HashSet<TaskDefinition>(0);
 
     public ModemDefinition() {
@@ -77,7 +80,7 @@ public class ModemDefinition implements java.io.Serializable {
     }
 
     @Id
-
+    @DocumentId
     @Column(name = "id", unique = true, nullable = false)
     public long getId() {
         return this.id;
@@ -97,6 +100,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.version = version;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "model", length = 45)
     public String getModel() {
         return this.model;
@@ -106,7 +110,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.model = model;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.YES)
     @Column(name = "manufacture", length = 45)
     public String getManufacture() {
         return this.manufacture;
@@ -126,6 +130,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.comId = comId;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "pin_number")
     public Integer getPinNumber() {
         return pinNumber;
@@ -135,6 +140,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.pinNumber = pinNumber;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "smsc_number", length = 45)
     public String getSmscNumber() {
         return this.smscNumber;
@@ -144,6 +150,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.smscNumber = smscNumber;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "price_per_sms", precision = 22, scale = 0)
     public Double getPricePerSms() {
         return this.pricePerSms;
@@ -191,6 +198,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.updatedOn = updatedOn;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "modem_id", unique = true, length = 45)
     public String getModemId() {
         return this.modemId;
@@ -200,6 +208,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.modemId = modemId;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "current_value", precision = 22, scale = 0)
     public Double getCurrentValue() {
         return this.currentValue;
@@ -219,6 +228,7 @@ public class ModemDefinition implements java.io.Serializable {
         this.taskDefinitions = taskDefinitions;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
     @Column(name = "baud_rate")
     public Integer getBaudRate() {
         return baudRate;
@@ -232,6 +242,23 @@ public class ModemDefinition implements java.io.Serializable {
     public Boolean getIsConnected() {
         return Service.getInstance().getGateway(modemId) != null;
     }
-    
-    
+
+    @Column(name = "phone_number", length = 45)
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Column(name = "check_pulsa", length = 45)
+    public String getCheckPulsa() {
+        return checkPulsa;
+    }
+
+    public void setCheckPulsa(String checkPulsa) {
+        this.checkPulsa = checkPulsa;
+    }
+
 }

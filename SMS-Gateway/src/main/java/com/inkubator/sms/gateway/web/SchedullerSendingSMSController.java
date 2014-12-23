@@ -12,7 +12,10 @@ import com.inkubator.sms.gateway.web.lazymodel.TaskDefinitionLazy;
 import com.inkubator.sms.gateway.web.model.SchedullerSmsModel;
 import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -33,6 +36,7 @@ public class SchedullerSendingSMSController extends BaseController {
     private Boolean isDisable;
     private LazyDataModel<TaskDefinition> lazyDataModel;
     private String pencarian;
+    private TaskDefinition selectedTaskDefinition;
 
     @Override
     public void initialization() {
@@ -150,7 +154,61 @@ public class SchedullerSendingSMSController extends BaseController {
         this.pencarian = pencarian;
     }
 
-    public void doSearch(){
-        lazyDataModel=null;
+    public void doSearch() {
+        lazyDataModel = null;
+    }
+
+    public void doEdit() {
+        try {
+            selectedTaskDefinition = taskDefinitionService.getEntiyByPK(selectedTaskDefinition.getId());
+            schedullerSmsModel = getModelFromEntity(selectedTaskDefinition);
+        } catch (Exception ex) {
+            LOGGER.error(ex, ex);
+        }
+    }
+
+    public TaskDefinition getSelectedTaskDefinition() {
+        return selectedTaskDefinition;
+    }
+
+    public void setSelectedTaskDefinition(TaskDefinition selectedTaskDefinition) {
+        this.selectedTaskDefinition = selectedTaskDefinition;
+    }
+
+    public SchedullerSmsModel getModelFromEntity(TaskDefinition definition) {
+        List<String> dataTosave = new ArrayList();
+        schedullerSmsModel = new SchedullerSmsModel();
+        schedullerSmsModel.setId(definition.getId());
+        schedullerSmsModel.setDestination(definition.getDestination());
+        schedullerSmsModel.setFromSending(definition.getFromSending());
+        schedullerSmsModel.setIsRepeatOnCondition(definition.getIsRepeatOnCondition());
+        schedullerSmsModel.setListPhoneAsString(definition.getDestination());
+        schedullerSmsModel.setModemId(definition.getModemDefinition().getId());
+        schedullerSmsModel.setName(definition.getName());
+        schedullerSmsModel.setRepeatTime(definition.getRepeatTime());
+        schedullerSmsModel.setScheduleType(definition.getScheduleType());
+        schedullerSmsModel.setSendDate(definition.getDate());
+        schedullerSmsModel.setSendTime(definition.getTime());
+        schedullerSmsModel.setSmsContent(definition.getSmsContent());
+        String dataList = definition.getDestination();
+        StringTokenizer st = new StringTokenizer(dataList, ";");
+        while (st.hasMoreTokens()) {
+            dataTosave.add(st.nextToken());
+        }
+        schedullerSmsModel.setListPhone(dataTosave);
+        return schedullerSmsModel;
+    }
+    
+    public void onDelete(){
+        
+    }
+    
+    public void doDelete(){
+        try {
+            this.taskDefinitionService.delete(selectedTaskDefinition);
+            lazyDataModel=null;
+        } catch (Exception ex) {
+            LOGGER.error(ex, ex);
+        }
     }
 }

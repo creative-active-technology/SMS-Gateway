@@ -15,6 +15,8 @@ import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,7 +30,7 @@ import org.smslib.Service;
 @ManagedBean(name = "modemConfigController")
 @ViewScoped
 public class ModemConfigController extends BaseController {
-
+    
     @ManagedProperty(value = "#{modemDefinitionService}")
     private ModemDefinitionService modemDefinitionService;
     @ManagedProperty(value = "#{modemManageService}")
@@ -37,68 +39,86 @@ public class ModemConfigController extends BaseController {
     private ModemDefinitionModel modemDefinitionModel;
     private ModemDefinition selectedDefinition;
     private Boolean isEdit;
-
+    
     public void setModemDefinitionService(ModemDefinitionService modemDefinitionService) {
         this.modemDefinitionService = modemDefinitionService;
     }
-
+    
     public List<ModemDefinition> getDataModemDefinitions() {
         return dataModemDefinitions;
     }
-
+    
     public void setDataModemDefinitions(List<ModemDefinition> dataModemDefinitions) {
         this.dataModemDefinitions = dataModemDefinitions;
     }
-
+    
     @Override
     public void initialization() {
-        try {
-            modemDefinitionModel = new ModemDefinitionModel();
-            dataModemDefinitions = this.modemDefinitionService.getAllData();
+        String modemId = FacesUtil.getRequestParameter("execution");
+        if (modemId != null) {
+            try {
+                isEdit = Boolean.TRUE;
+                selectedDefinition = this.modemDefinitionService.getEntiyByPK(Long.parseLong(modemId.substring(1)));
+                modemDefinitionModel = getModelFromEnity(selectedDefinition);
+            } catch (Exception ex) {
+                LOGGER.error(ex, ex);
+            }
+        } else {
             isEdit = Boolean.FALSE;
-        } catch (Exception ex) {
-            LOGGER.error(ex, ex);
+            try {
+                modemDefinitionModel = new ModemDefinitionModel();
+//                dataModemDefinitions = this.modemDefinitionService.getAllData();
+                isEdit = Boolean.FALSE;
+            } catch (Exception ex) {
+                LOGGER.error(ex, ex);
+            }
         }
+        
     }
-
+    
     public String doRedirectModemConfig() {
         return "/protected/modem_config.htm?faces-redirect=true";
-
+        
     }
-
+    
     public ModemDefinitionModel getModemDefinitionModel() {
         return modemDefinitionModel;
     }
-
+    
     public void setModemDefinitionModel(ModemDefinitionModel modemDefinitionModel) {
         this.modemDefinitionModel = modemDefinitionModel;
     }
-
-    public void doSave() {
+    
+    public String doSave() {
+        String redirect = null;
         try {
             ModemDefinition md = getEntityFromModel(modemDefinitionModel);
             if (isEdit) {
                 modemDefinitionService.update(md);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Proses Update", "Data berhasil diupdate");
                 FacesUtil.getFacesContext().addMessage(null, msg);
+                FacesUtil.getExternalContext().getFlash().setKeepMessages(true);
+                redirect = "/protected/modem_config_view.htm?faces-redirect=true";
             } else {
                 modemDefinitionService.save(md);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Proses Simpan", "Data berhasil disimpan");
                 FacesUtil.getFacesContext().addMessage(null, msg);
+                FacesUtil.getExternalContext().getFlash().setKeepMessages(true);
+                redirect = "/protected/modem_config_view.htm?faces-redirect=true";
             }
             dataModemDefinitions = this.modemDefinitionService.getAllData();
             modemDefinitionModel = new ModemDefinitionModel();
         } catch (BussinessException ex) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Proses Simpan", ex.getMessage());
             FacesUtil.getFacesContext().addMessage(null, msg);
-
+            
         } catch (Exception ex) {
-
+            
             LOGGER.error(ex, ex);
         }
-
+        return redirect;
     }
-
+    
     private ModemDefinition getEntityFromModel(ModemDefinitionModel model) {
         ModemDefinition md = new ModemDefinition();
         if (model.getId() != null) {
@@ -113,9 +133,11 @@ public class ModemConfigController extends BaseController {
         md.setPricePerSms(model.getPricePerSms());
         md.setSmscNumber(model.getSmscNumber());
         md.setBaudRate(model.getBaudRate());
+        md.setCheckPulsa(model.getCheckPulsa());
+        md.setPhoneNumber(model.getPhoneNumber());
         return md;
     }
-
+    
     public ModemDefinitionModel getModelFromEnity(ModemDefinition definition) {
         ModemDefinitionModel definitionModel = new ModemDefinitionModel();
         definitionModel.setId(definition.getId());
@@ -129,18 +151,19 @@ public class ModemConfigController extends BaseController {
         definitionModel.setPricePerSms(definition.getPricePerSms());
         definitionModel.setCurrentValue(definition.getCurrentValue());
         definitionModel.setSmscNumber(definition.getSmscNumber());
-
+        definitionModel.setPhoneNumber(definition.getPhoneNumber());
+        definitionModel.setCheckPulsa(definition.getCheckPulsa());
         return definitionModel;
     }
-
+    
     public ModemDefinition getSelectedDefinition() {
         return selectedDefinition;
     }
-
+    
     public void setSelectedDefinition(ModemDefinition selectedDefinition) {
         this.selectedDefinition = selectedDefinition;
     }
-
+    
     public void doEdit() {
         try {
             isEdit = Boolean.TRUE;
@@ -150,15 +173,15 @@ public class ModemConfigController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
-
+    
     public Boolean getIsEdit() {
         return isEdit;
     }
-
+    
     public void setIsEdit(Boolean isEdit) {
         this.isEdit = isEdit;
     }
-
+    
     public void doDelete() {
         try {
             modemDefinitionService.delete(selectedDefinition);
@@ -167,7 +190,7 @@ public class ModemConfigController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
-
+    
     public void doConnect() {
         try {
             if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STOPPED)) {
@@ -193,11 +216,9 @@ public class ModemConfigController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
-
+    
     public void setModemManageService(ModemManageService modemManageService) {
         this.modemManageService = modemManageService;
     }
-
     
-   
 }

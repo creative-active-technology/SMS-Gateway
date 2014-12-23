@@ -6,6 +6,7 @@
 package com.inkubator.sms.gateway.web.model;
 
 import java.io.Serializable;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -23,6 +24,8 @@ public class ModemDefinitionModel implements Serializable {
     private Double pricePerSms;
     private Double currentValue;
     private Integer baudRate;
+    private String phoneNumber;
+    private String checkPulsa;
 
     public Long getId() {
         return id;
@@ -72,6 +75,7 @@ public class ModemDefinitionModel implements Serializable {
         this.pinNumber = pinNumber;
     }
 
+    @Pattern(regexp = "^[+][\\d() -]+", message = "SMSC Number : bukan format no telepon yang benar")
     public String getSmscNumber() {
         return smscNumber;
     }
@@ -103,6 +107,22 @@ public class ModemDefinitionModel implements Serializable {
     public void setBaudRate(Integer baudRate) {
         this.baudRate = baudRate;
     }
-    
+
+    @Pattern(regexp = "^[+][\\d() -]+", message = "Nomor Telepon : bukan format no telepon yang benar")
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCheckPulsa() {
+        return checkPulsa;
+    }
+
+    public void setCheckPulsa(String checkPulsa) {
+        this.checkPulsa = checkPulsa;
+    }
 
 }

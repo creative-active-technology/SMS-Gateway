@@ -12,28 +12,32 @@
     </h:head>
     <h:body>
         <p:growl globalOnly="true" id="growlSchedullerId" showSummary="true" showDetail="true"/>
-        <h:form>
-            <div id="header_login">
-                <div id="header_login_left">
-                    <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 14px"/> 
-                    <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/>
+
+        <h:form id="headarId">
+            <p:cache  region="testcache">
+                <div id="header_login">
+                    <div id="header_login_left">
+                        <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 14px"/> 
+                        <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/>
+                    </div>
+                    <div style="float: right;padding-top: 7px;margin-right: 5px">
+                        <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                    </div>
                 </div>
-                <div style="float: right;padding-top: 7px;margin-right: 5px">
-                    <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                <div id="header_menu" style="margin-bottom: 10px" >
+                    <h:panelGrid style="font-size: 12px;padding-top: 6px" columns="4" id="menuId">
+                        <p:commandButton value="Kirim SMS"  title="Kirim SMS" action="#{homeController.doRedirectSms()}"/>
+                        <p:commandButton value="Scheduller SMS"  title="Scheduller SMS" action="#{homeController.doRedirectSchedullerSms()}"/>
+                        <p:commandButton value="SMS History"  title="SMS History"/>
+                        <p:commandButton value="Modem Config" title="Modem Config" action="#{homeController.doRedirectModemConfig()}"/>
+                    </h:panelGrid>
                 </div>
-            </div>
-            <div id="header_menu" style="margin-bottom: 10px" >
-                <h:panelGrid style="font-size: 12px;padding-top: 6px" columns="4" id="menuId">
-                    <p:commandButton value="Kirim SMS"  title="Kirim SMS" action="#{homeController.doRedirectSms()}"/>
-                    <p:commandButton value="Scheduller SMS"  title="Scheduller SMS" action="#{homeController.doRedirectSchedullerSms()}"/>
-                    <p:commandButton value="SMS History"  title="SMS History"/>
-                    <p:commandButton value="Modem Config" title="Modem Config" action="#{homeController.doRedirectModemConfig()}"/>
-                </h:panelGrid>
-            </div>
+            </p:cache>
         </h:form>
+
         <p:outputLabel value="Scheduller SMS" style="font-size: 16px;margin-left: 10px;font-weight: bold;color: #006600" />
         <h:form id="smsFormId">
-            <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 30px">   
+            <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 20px">   
                 <h:panelGrid columns="2"  cellpadding="1" cellspacing="4" id="modemFormInputId">
                     <p:outputLabel value="Nama Schedule" for="nameId"/>
                     <p:outputLabel value="Jenis Schedule" for="scheduleType"/>
@@ -117,12 +121,12 @@
         </p:dialog>
         <h:form id="tableViewId">
 
-            <p:separator />
+            <p:separator style="margin-left: 20px;margin-right: 20px" />
             <div style="margin: 20px">
                 <h:panelGrid columns="4">
                     <p:outputLabel value="Pencarian" style="font-weight: bold" />
                     <p:outputLabel value=":" style="font-weight: bold"  />
-                    <p:inputText  value="#{schedullerSendingSMSController.pencarian}"/>
+                    <p:inputText  value="#{schedullerSendingSMSController.pencarian}" style="width: 220px" placeholder="Full Text Service"/>
                     <p:commandButton value="Cari"  action="#{schedullerSendingSMSController.doSearch()}" update="tableScheduleId"/>
                 </h:panelGrid>
                 <p:dataTable value="#{schedullerSendingSMSController.lazyDataModel}" var="tastDefinitions" lazy="true" paginator="true" pageLinks="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {PageLinks} {NextPageLink} {LastPageLink}"
@@ -145,30 +149,30 @@
                     </p:column>
                     <p:column sortBy="#{tastDefinitions.scheduleType}" >
                         <f:facet name="header">
-                            <h:outputText value="Jenis Task"/>
+                            <h:outputText value="Jenis Tugas"/>
                         </f:facet>
                         <h:outputLabel value= "#{tastDefinitions.scheduleType}" />
                     </p:column>
                     <p:column sortBy="isRepeatOnCondition" >
                         <f:facet name="header">
-                            <h:outputText value="Jenis Pengulangan"/>
+                            <h:outputText value="Pengulangan"/>
                         </f:facet>
                         <h:outputLabel value= "#{tastDefinitions.isRepeatOnCondition}" />
                     </p:column>
                     <p:column sortBy="name" >
                         <f:facet name="header">
-                            <h:outputText value="Tanggal Pengiriman"/>
+                            <h:outputText value="Tanggal"/>
                         </f:facet>
                         <p:outputLabel value= "#{tastDefinitions.date}" >
-                            <f:convertDateTime pattern="dd MMMM yyyy" />
+                            <f:convertDateTime pattern="dd-MM-yyyy"  timeZone="GMT+7"/>
                         </p:outputLabel>
                     </p:column>
                     <p:column sortBy="name" >
                         <f:facet name="header">
-                            <h:outputText value="Waktu Pengiriman"/>
+                            <h:outputText value="Pukul"/>
                         </f:facet>
                         <p:outputLabel value= "#{tastDefinitions.time}" >
-                            <f:convertDateTime pattern="hh:mm" />
+                            <!--<f:convertDateTime pattern="hh:mm:ss"  type="time" timeZone="gmt+7"/>-->
                         </p:outputLabel>
                     </p:column>
                     <p:column sortBy="name" >
@@ -189,6 +193,23 @@
                         </f:facet>
                         <p:outputLabel value= "#{tastDefinitions.modemDefinition.comId}" />
                     </p:column>
+                    <p:column headerText="Aksi" style="width: 12%;text-align: center" exportable="false">
+                        <p:commandButton  icon="ui-icon-zoomin" title="#{appmsg['global.detail']}" label="#{appmsg['global.detail']}"
+                                          action="#{empDataViewController.doDetail()}" style="font-size: 10px!important" >                        
+                            <f:setPropertyActionListener value="#{empViewData}" target="#{empDataViewController.selectedEmpData}" />
+                        </p:commandButton>
+                        - 
+                        <p:commandButton  icon="ui-icon-trash" title="#{appmsg['global.delete']}" label="#{appmsg['global.delete']}"  style="font-size: 10px!important"  update=":deleteDialogFormId"
+                                          onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" action="#{schedullerSendingSMSController.onDelete()}" >
+                            <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerSendingSMSController.selectedTaskDefinition}" />
+                        </p:commandButton>
+                        -
+                        <p:commandButton  icon="ui-icon-folder-open" title="#{appmsg['global.edit']}" label="#{appmsg['global.edit']}" style="font-size: 10px!important" 
+                                          action="#{schedullerSendingSMSController.doEdit()}" update=":smsFormId">
+                            <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerSendingSMSController.selectedTaskDefinition}" />
+
+                        </p:commandButton> 
+                    </p:column>        
                     <f:facet name="footer">
                         <p:outputLabel value="Total : "/>
                         <p:outputLabel value="#{schedullerSendingSMSController.lazyDataModel.rowCount}"/>
@@ -196,8 +217,37 @@
                     </f:facet>  
                 </p:dataTable>
             </div>
-
         </h:form>
+        <p:dialog widgetVar="confirmDialogDelete" header="Konfirmasi Delete" modal="true" width="450" dynamic="true" onShow="PF('statusDialog').hide()"
+                  appendTo="@(body)" resizable="false" id="confirmDialogJobTitleId" hideEffect="puff" showEffect="clip" closeOnEscape="true"  styleClass="header_small_no_bold">
+            <h:form id="deleteDialogFormId">
+                <div align="center">
+                    <div align="center">
+                        <h:panelGrid columns="2" style="text-align: justify">
+                            <p:graphicImage library="images" name="recycle_bin.png" width="81" height="81" cache="true" />
+                            <h:panelGroup>
+                                <h:panelGrid style="text-align: center">
+                                    <p:outputLabel value="Apakah Anda yakin akan  menghapus data berikut?" styleClass="label_hrm"/>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </div>
+                    <h:panelGrid  columns="3">
+                        <p:outputLabel value="Nama Task" styleClass="label_hrm"/>
+                        <p:outputLabel value=":"  styleClass="label_hrm" />
+                        <p:outputLabel value="#{schedullerSendingSMSController.selectedTaskDefinition.name}" styleClass="isitext_hrm"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton value="Ya" action="#{schedullerSendingSMSController.doDelete()}" id="yesId" title="#{appmsg['global.yes']}" styleClass="isitext_hrm" update=":tableViewId"
+                                     oncomplete="PF('confirmDialogDelete').hide()" style="margin-right: 5px" icon="ui-icon-check"/>
+                    <p:commandButton value="Tidak" oncomplete="PF('confirmDialogDelete').hide()" icon="ui-icon-close" title="#{appmsg['global.no']}"  styleClass="isitext_hrm"/>
+
+                </div>
+            </h:form>
+        </p:dialog>
+        <p:dialog modal="true" widgetVar="statusDialog" header="#{appmsg['global.waiting']}" draggable="false" closable="false" resizable="false">
+            <div align="center"><h:graphicImage library="images" name="waiting.gif"/></div>
+        </p:dialog>
     </h:body>
 </html>
 

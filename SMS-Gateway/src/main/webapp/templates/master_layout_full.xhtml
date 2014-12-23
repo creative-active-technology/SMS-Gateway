@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>SMS Gateway</title>
+        <link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_form.css" type="text/css" media="screen" />
+    </h:head>
+    <h:body>
+
+        <div class="ui-grid ui-grid-responsive">
+
+            <h:form>
+                <p:cache region="masterlayout">
+                    <div id="header_login">
+                        <div id="header_login_left">
+                            <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 16px!important;font-family: Verdana!important "/> 
+                            <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px;font-size: 16px!important;font-family: Verdana!important "/> 
+                        </div>
+                        <div style="float: right;padding-top: 7px;margin-right: 5px">
+                            <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                        </div>
+                    </div>
+                </p:cache>
+            </h:form>
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2" id="header_menu">
+
+                    <h:form>
+                        <!--<p:cache region="masterlayoutMenu">-->
+                            <p:panelMenu style="width:90%;margin-left: 10px;margin-top: 10px;padding-right: 10px;font-size: 14px"  >
+                                <p:submenu label="Konfigurasi Modem">
+                                    <p:menuitem value="Daftar Modem"   title="Daftar Modem" url="/protected/modem_config_view.htm"  icon="ui-icon-video" /> 
+                                    <p:menuitem value="Modem Form"  url="/protected/modem_config_form.htm"  icon="ui-icon-note"  title="Modem Form"/>
+                                </p:submenu>
+                                <p:submenu label="Pengiriman SMS">
+                                    <p:menuitem value="Daftar Pengiriman SMS" actionListener="#{menuView.save}" icon="ui-icon-disk" />
+                                    <p:menuitem value="Kirim SMS" url="/protected/sending_sms.htm"  icon="ui-icon-disk" />
+                                    <p:menuitem value="Kirim SMS Terjadwal" actionListener="#{menuView.save}" icon="ui-icon-disk" />
+                                </p:submenu>
+                                <p:separator />
+                                <p:submenu label="Account dan User " >
+                                    <p:submenu label="Links" icon="ui-icon-extlink">
+                                        <p:submenu label="PrimeFaces" icon="ui-icon-heart">
+                                            <p:menuitem value="Home" url="http://www.primefaces.org" icon="ui-icon-home" />
+                                            <p:menuitem value="Docs" url="http://www.primefaces.org/documentation" icon="ui-icon-document" />
+                                            <p:menuitem value="Download" url="http://www.primefaces.org/downloads" icon="ui-icon-arrowthick-1-s" />
+                                            <p:menuitem value="Support" url="http://www.primefaces.org/support" icon="ui-icon-wrench" />
+                                        </p:submenu>
+                                    </p:submenu>
+                                    <p:menuitem value="Mobile"  icon="ui-icon-signal" />
+                                </p:submenu>
+                            </p:panelMenu>
+                        <!--</p:cache>-->
+                    </h:form>
+
+                </div>
+
+                <ui:insert name="center"  id="contentId"/>
+            </div>
+
+
+
+
+        </div>
+        <p:dialog modal="true" widgetVar="statusDialog" header="#{appmsg['global.waiting']}" draggable="false" closable="false" resizable="false">
+            <div align="center"><h:graphicImage library="images" name="waiting.gif"/></div>
+        </p:dialog>
+    </h:body>
+</html>

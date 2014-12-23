@@ -45,8 +45,9 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     }
 
     @Override
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
     public TaskDefinition getEntiyByPK(Long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.taskDefinitionDao.getByFullText(id);
     }
 
     @Override
@@ -130,8 +131,9 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     }
 
     @Override
+    @Transactional(readOnly = false,isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(TaskDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.taskDefinitionDao.delete(entity);
     }
 
     @Override

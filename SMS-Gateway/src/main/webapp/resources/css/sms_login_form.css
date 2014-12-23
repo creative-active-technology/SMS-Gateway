@@ -54,18 +54,23 @@ root{display:block}
         margin-top: -8px;*/
 }
 
-#header_login_left{float:left;padding:10px 0 0 4px;font-size:16px!important}
+#header_login_left{
+    float:left;padding:10px 0 0 4px;font-size:16px!important
+}
 
 #header_menu {
-    background: none repeat scroll 0 0 #cccccc;
-    box-shadow: 0 -1px rgba(255,255,255,.05) inset,0 1px rgba(0,0,0,.05);
-    position: relative;
-    text-align: left;
-    text-shadow: 0 1px rgba(0,0,0,.1);
-    z-index: 1;
-    height: 45px;
-    color: #fff;
-    font-family: Trebuchet MS;
+    background: none repeat scroll 0 0 #666666;
+    min-height: 633px;
+
+
+    /*box-shadow: 0 -1px rgba(255,255,255,.05) inset,0 1px rgba(0,0,0,.05);*/
+    /*    position: relative;
+        text-align: left;
+        text-shadow: 0 1px rgba(0,0,0,.1);
+        z-index: 1;*/
+    height: auto;
+    /*    color: #fff;
+        font-family: Trebuchet MS;*/
     /*    margin-left: -8px;
         margin-right:  -8px;
         margin-top: -8px;*/
@@ -93,7 +98,11 @@ root{display:block}
     font-size:13px;
     /*font-family: Calibri;*/
 }
+.label_hrm{font-family:Calibri!important;font-size:14px!important;font-weight:bold!important}
 
-
-
+#header_isi{
+    background: none repeat scroll 0 0 #ffffff;
+    min-height: 633px;
+    height: auto;
+}
 

@@ -45,7 +45,7 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
     @Override
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
     public ModemDefinition getEntiyByPK(Long id) throws Exception {
-        return this.modemDefinitionDao.getEntiyByPK(id);
+        return this.modemDefinitionDao.getByFullText(id);
     }
 
     @Override
@@ -81,6 +81,8 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
         definition.setSmscNumber(entity.getSmscNumber());
         definition.setUpdatedBy("System");
         definition.setUpdatedOn(new Date());
+        definition.setCheckPulsa(entity.getCheckPulsa());
+        definition.setPhoneNumber(entity.getPhoneNumber());
         this.modemDefinitionDao.update(definition);
     }
 
@@ -219,6 +221,12 @@ public class ModemDefinitionServiceImpl extends IServiceImpl implements ModemDef
     @Override
     public List<ModemDefinition> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+     @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<ModemDefinition> getAllByFullText(String param) throws Exception {
+     return this.modemDefinitionDao.getAllByFullText(param);
     }
 
 }

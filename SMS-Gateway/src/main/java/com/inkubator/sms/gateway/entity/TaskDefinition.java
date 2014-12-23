@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
@@ -73,7 +74,7 @@ public class TaskDefinition implements java.io.Serializable {
     }
 
     @Id
-
+    @DocumentId
     @Column(name = "id", unique = true, nullable = false)
     public long getId() {
         return this.id;
@@ -104,7 +105,7 @@ public class TaskDefinition implements java.io.Serializable {
         this.modemDefinition = modemDefinition;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+    @Field(index = Index.YES, analyze = Analyze.NO, store = Store.NO)
     @Column(name = "name", unique = true, length = 45)
     public String getName() {
         return this.name;
@@ -114,7 +115,7 @@ public class TaskDefinition implements java.io.Serializable {
         this.name = name;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+    @Field(index = Index.YES, analyze = Analyze.NO, store = Store.NO)
     @Column(name = "schedule_type", length = 45)
     public String getScheduleType() {
         return this.scheduleType;

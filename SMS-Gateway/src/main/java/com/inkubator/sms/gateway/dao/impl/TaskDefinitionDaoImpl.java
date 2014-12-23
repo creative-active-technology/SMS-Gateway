@@ -46,7 +46,7 @@ public class TaskDefinitionDaoImpl extends IDAOImpl<TaskDefinition> implements T
         } else {
             sort = new Sort(new SortField(orde.getPropertyName(), SortField.STRING_VAL, true));
         }
-        System.out.println("Nilai sorrt "+orde.getPropertyName());
+        System.out.println("Nilai sorrt " + orde.getPropertyName());
         FullTextQuery fullTextQuery1 = doSearchFullText(parameter, fullTextSession);
         fullTextQuery1.setCriteriaQuery(criteria);
         fullTextQuery1.setFirstResult(minResult);
@@ -68,17 +68,28 @@ public class TaskDefinitionDaoImpl extends IDAOImpl<TaskDefinition> implements T
         QueryBuilder mythQB = searchFactory.buildQueryBuilder().forEntity(getEntityClass()).get();
         Query luceneQuery;
         if (parameter != null && !parameter.equalsIgnoreCase("")) {
-            luceneQuery = mythQB.keyword().onField("name")
+            luceneQuery = mythQB.keyword().onField("name").boostedTo(3)
                     .andField("scheduleType")
                     .andField("isRepeatOnCondition")
                     .andField("smsContent")
                     .andField("modemDefinition.manufacture")
                     .andField("modemDefinition.comId")
-                    .matching(parameter).createQuery();
+                    .matching(parameter+"*").createQuery();
         } else {
             luceneQuery = mythQB.all().createQuery();
         }
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(luceneQuery, TaskDefinition.class);
         return fullTextQuery;
+    }
+
+    @Override
+    public TaskDefinition getByFullText(Long id) {
+        System.out.println(" hahhahahah");
+        FullTextSession fullTextSession = Search.getFullTextSession(getCurrentSession());
+        SearchFactory searchFactory = fullTextSession.getSearchFactory();
+        QueryBuilder mythQB = searchFactory.buildQueryBuilder().forEntity(getEntityClass()).get();
+        Query luceneQuery = mythQB.keyword().onField("id").matching(id).createQuery();
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(luceneQuery, TaskDefinition.class);
+        return (TaskDefinition) fullTextQuery.uniqueResult();
     }
 }
