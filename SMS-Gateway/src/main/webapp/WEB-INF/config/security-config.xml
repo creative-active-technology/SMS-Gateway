@@ -20,7 +20,7 @@
         <!--<security:logout invalidate-session="true" delete-cookies="JSESSIONID" logout-url="/logout.htm"/>-->
       
     </security:http>
-    <bean id="myHandlerSuccessLogin" class="com.inkubator.securitycore.util.AuthenticationSuccessHandler" lazy-init="true"/> 
+    <bean id="myHandlerSuccessLogin" class="com.inkubator.sms.gateway.util.CustomAuthenticationSuccessHandler" lazy-init="true"/> 
     <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
         <constructor-arg index="0" value="/"/>
         <constructor-arg index="1">
