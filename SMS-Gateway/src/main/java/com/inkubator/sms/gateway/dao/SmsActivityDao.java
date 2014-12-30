@@ -9,6 +9,7 @@ import com.inkubator.datacore.dao.IDAO;
 import com.inkubator.sms.gateway.entity.SmsActivity;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.criterion.Order;
 
 /**
  *
@@ -19,4 +20,8 @@ public interface SmsActivityDao extends IDAO<SmsActivity> {
     public List<SmsActivity> getListBySendDate(Date date);
 
     public List<SmsActivity> getAllByLucenSendDate(Date date);
+
+    public List<SmsActivity> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) ;
+
+    public Integer getTotalByFullTextService(String parameter) ;
 }

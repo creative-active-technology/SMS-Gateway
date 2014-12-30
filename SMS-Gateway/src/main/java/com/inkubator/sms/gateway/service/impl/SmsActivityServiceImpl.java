@@ -244,4 +244,16 @@ public class SmsActivityServiceImpl extends IServiceImpl implements SmsActivityS
 
     }
 
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<SmsActivity> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) throws Exception {
+        return this.smsActivityDao.getAllByFullTextService(parameter, minResult, maxResult, order);
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
+    public Integer getTotalByFullTextService(String parameter) throws Exception {
+        return this.smsActivityDao.getTotalByFullTextService(parameter);
+    }
+
 }
