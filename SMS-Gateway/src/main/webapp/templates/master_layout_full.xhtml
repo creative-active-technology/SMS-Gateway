@@ -15,18 +15,18 @@
         <div class="ui-grid ui-grid-responsive">
 
             <h:form>
-                <p:cache region="masterlayout">
-                    <div id="header_login">
-                        <div id="header_login_left">
-                            <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 20px!important;font-family: Sans!important "/> 
-                            <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px;font-size:20px!important;font-family: Verdana!important "/> 
-                        </div>
-                        <div style="float: right!important; padding-top: 10px">
-                            <p:graphicImage  name="inkuba_logo_4.png" library="images" width="150" style="margin-right: 10px" cache="true" />
-                        </div>
-                        <div style="clear: both" />
+                <!--<p:cache region="masterlayout">-->
+                <div id="header_login">
+                    <div id="header_login_left">
+                        <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 20px!important;font-family: Verdana!important "/> 
+                        <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px;font-size:20px!important;font-family: Verdana!important "/> 
                     </div>
-                </p:cache>
+                    <div style="float: right!important; padding-top: 10px">
+                        <p:graphicImage  name="inkuba_logo_4.png" library="images" width="180" style="margin-right: 10px" cache="true" />
+                    </div>
+                    <div style="clear: both" />
+                </div>
+                <!--</p:cache>-->
             </h:form>
 
             <div class="ui-grid-row">
@@ -35,15 +35,16 @@
                         <!--<p:cache region="masterlayoutMenu">-->
                         <p:menu style="width:84%;margin-left: 10px;margin-top: 10px;padding-right: 10px;font-size: 14px"  >
                             <p:submenu label="Konfigurasi Modem">
-                                <p:menuitem value="Daftar Modem"   title="Daftar Modem" url="/protected/modem_config_view.htm"  icon="ui-icon-video" /> 
-                                <p:menuitem value="Modem Form"  url="/protected/modem_config_form.htm"  icon="ui-icon-note"  title="Modem Form"/>
+                                <p:menuitem value="Daftar Modem"   title="Daftar Modem" url="/protected/modem_config_view.htm" icon="fa fa-comments-o"  /> 
+                                <p:menuitem value="Modem Form"  url="/protected/modem_config_form.htm"  icon="fa fa-credit-card"  title="Modem Form"/>
                             </p:submenu>
                             <p:submenu label="Pengiriman SMS">
                                 <p:menuitem value="Daftar Pengiriman SMS"  url="/protected/sending_sms_history.htm"  icon="ui-icon-disk" />
                                 <p:menuitem value="Kirim SMS" url="/protected/sending_sms.htm"  icon="ui-icon-disk" />
-                                <p:menuitem value="Kirim SMS Terjadwal" actionListener="#{menuView.save}" icon="ui-icon-disk" />
+                                <p:menuitem value="Kirim SMS Terjadwal" url="/protected/scheduller_sms.htm"  icon="ui-icon-disk" />
+                                <p:menuitem value="Daftar Jadwal SMS" url="/protected/scheduller_sms_view.htm"  icon="ui-icon-disk" />
                             </p:submenu>
-                      
+
                             <p:submenu label="Account dan User " >
                                 <p:menuitem value="Home" url="http://www.primefaces.org" icon="ui-icon-home" />
                                 <p:menuitem value="Docs" url="http://www.primefaces.org/documentation" icon="ui-icon-document" />
@@ -59,9 +60,9 @@
 
                 <ui:insert name="center"  id="contentId"/>
             </div>
-<!--            <div id="footer_header">
-                
-            </div>-->
+            <!--            <div id="footer_header">
+                            
+                        </div>-->
 
 
 

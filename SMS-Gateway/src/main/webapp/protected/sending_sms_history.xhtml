@@ -36,8 +36,8 @@
                             <p:commandButton value="Cari"  icon="ui-icon-search" action="#{modemViewController.doSearch()}" />
                         </h:panelGrid>
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
-                            <p:commandButton value="Kirim SMS"  icon="ui-icon-mail-closed" action="#{sendingSMSViewController.doAddSms()}"/>
-                            
+                            <p:commandButton value="Kirim SMS"  icon="fa fa-envelope-o" action="#{sendingSMSViewController.doAddSms()}"/>
+                            <p:commandButton value="Penjadwalan SMS"  icon="fa fa-calendar" action="#{sendingSMSViewController.doAddSchedule()}"/>
                         </h:panelGrid>
                         <div style="clear: both" />
                         <p:dataTable  var="smsHistory"  value="#{sendingSMSViewController.lazyDataModel}" lazy="true" paginator="true" pageLinks="7" 

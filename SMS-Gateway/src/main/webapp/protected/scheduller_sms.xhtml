@@ -11,114 +11,217 @@
         <link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_form.css" type="text/css" media="screen" />
     </h:head>
     <h:body>
-        <p:growl globalOnly="true" id="growlSchedullerId" showSummary="true" showDetail="true"/>
+        <ui:composition template="/templates/master_layout_full.xhtml"> 
+            <ui:define name="windowTitle">
+                Home
+            </ui:define>
+            <ui:define name="center">
+                <div class="ui-grid-col-10" id="header_isi">
+                    <p:growl globalOnly="true" id="growlModemConfig" showSummary="true" showDetail="true"/>
+                    <h:form id="smsSchedulerId">
+                        <div style="margin: 10px">
+                            <p:outputLabel value="Jadwal SMS"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <p:outputLabel value="Form Pengiriman SMS Terjadwal"  style="font-size: 11px;margin-left: 5px" />
+                        </div>
+                        <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
+                            <p:menuitem value="Home"  url="/protected/home.htm" />
+                            <p:menuitem value="Daftar Pengiriman SMS"  url="/protected/sending_sms_history.htm" />
+                            <p:menuitem value="Jadwal SMS"  url="/protected/scheduller_sms.htm" />
 
-        <h:form id="headarId">
-            <p:cache  region="testcache">
-                <div id="header_login">
-                    <div id="header_login_left">
-                        <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 14px"/> 
-                        <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/>
-                    </div>
-                    <div style="float: right;padding-top: 7px;margin-right: 5px">
-                        <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
-                    </div>
+                        </p:breadCrumb>
+                        <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 20px">   
+                            <h:panelGrid columns="2"  cellpadding="1" cellspacing="4" id="modemFormInputId">
+                                <p:outputLabel value="Nama Schedule" for="nameId"/>
+                                <p:outputLabel value="Jenis Schedule" for="scheduleType"/>
+                                <p:inputText  id="nameId" style="width: 247px"  required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.name}"/>
+                                <p:selectOneMenu id="scheduleType"  value="#{schedullerSendingSMSController.schedullerSmsModel.scheduleType}"
+                                                 required="true" label="Pilihan Modem"
+                                                 style="text-align: left;width:180px" >
+                                    <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                    <f:selectItem itemLabel="Diulang" itemValue="REPEAT"/>
+                                    <f:selectItem itemLabel="Sekali Kirim" itemValue="ONETIME"/>
+                                    <p:ajax listener="#{schedullerSendingSMSController.changeScheduleType()}" update="pengulanganId"  partialSubmit="true" process="@this"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Kondisi Pengulangan" for="pengulanganId"/>
+
+                                <p:outputLabel value="Tanggal Kirim" for="sendDate"/>
+                                <p:selectOneMenu id="pengulanganId"  value="#{schedullerSendingSMSController.schedullerSmsModel.isRepeatOnCondition}" disabled="#{schedullerSendingSMSController.isDisable}"
+                                                 required="true" label="Pilihan Modem"
+                                                 style="text-align: left;width: 250px" >
+                                    <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                    <f:selectItem itemLabel="Setiap Hari" itemValue="EVERYDAY"/>
+                                    <f:selectItem itemLabel="Setiap Minggu" itemValue="EVERYWEEK"/>
+                                    <f:selectItem itemLabel="Setiap Bulan" itemValue="EVERYMONTH" />
+                                    <f:selectItem itemLabel="Setiap Tahun" itemValue="EVERYYEAR" />
+                                    <f:selectItem itemLabel="Waktu Tertentu" itemValue="ONETIME" />
+
+                                </p:selectOneMenu>
+                                <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
+
+                                <p:outputLabel value=" Pengulangan " for="timeSend" />
+                                <p:outputLabel value="Waktu Kirim " for="timeSend" />
+                                <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}" readonly="true"/>
+                                <pe:timePicker intervalMinutes="10" id="timeSend" required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.sendTime}"/>
+
+
+
+                                <p:outputLabel value="Jenis Modem" for="modemId"/>
+                                <p:outputLabel value="Kirim Ke" for="sendId"/>
+                                <p:selectOneMenu id="modemId"  value="#{schedullerSendingSMSController.schedullerSmsModel.modemId}"
+                                                 required="true" label="Pilihan Modem"
+                                                 style="text-align: left;width: 250px" >
+                                    <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                    <f:selectItems value="#{sendingSMSController.mapOfModem}"/>
+                                </p:selectOneMenu>
+                                <h:panelGroup>
+                                    <p:inputText value="#{schedullerSendingSMSController.schedullerSmsModel.listPhoneAsString}"  placeholder="NO HP" id="sendId" required="true" style="width: 250px" readonly="true"/>
+                                    <p:commandButton value="+"  style="margin-left: 5px"  oncomplete="PF('addDialogSMS').show()" immediate="true"/>
+                                </h:panelGroup>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1">
+                                <p:outputLabel value="Isi SMS" for="isiSms"/>
+                                <p:inputTextarea id="isiSms" rows="4" cols="20" counter="counter" maxlength="150" value="#{schedullerSendingSMSController.schedullerSmsModel.smsContent}" required="true"
+                                                 style="width: 545px; height: 90px;" counterTemplate="{0} sisa karakter" autoResize="true" label="SMS" title="SMS"/>
+
+                                <p:outputLabel/>
+                                <p:outputLabel id="counter"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Simpan" icon="ui-icon-disk" action="#{schedullerSendingSMSController.saveSchedule()}" update="smsSchedulerId,:growlModemConfig" />
+                                <p:commandButton value="Batal" title="Batal" process="@this" update="smsSchedulerId" action="#{schedullerSendingSMSController.doReset()}" immediate="true"
+                                                 icon="ui-icon-refresh" styleClass="isitext_hrm"  style="margin-right: 5px" >  
+                                    <p:resetInput target="smsSchedulerId" />  
+                                </p:commandButton>
+
+                            </h:panelGrid>
+                        </div>
+                    </h:form>
+                    <p:dialog widgetVar="addDialogSMS" header="Tambah No.HP" modal="true" width="375" dynamic="true" 
+                              appendTo="@(body)" resizable="false"   closeOnEscape="true" >
+                        <h:form id="addId">
+                            <p:messages/>
+                            <h:panelGrid  columns="4">
+                                <p:outputLabel value="No. HP"/>
+                                <p:outputLabel value=":"  />
+                                <p:inputText  value="#{schedullerSendingSMSController.schedullerSmsModel.destination}" placeholder="Contoh : +8787878787"/>
+                                <p:commandButton value="Tambah" action="#{schedullerSendingSMSController.doAdd()}" id="yesId" title="Ya" update=":smsSchedulerId:sendId,addId"
+                                                 style="margin-right: 5px" />
+                            </h:panelGrid>
+                            <p:focus for="addId" />
+                        </h:form>
+                    </p:dialog>
                 </div>
-                <div id="header_menu" style="margin-bottom: 10px" >
-                    <h:panelGrid style="font-size: 12px;padding-top: 6px" columns="4" id="menuId">
-                        <p:commandButton value="Kirim SMS"  title="Kirim SMS" action="#{homeController.doRedirectSms()}"/>
-                        <p:commandButton value="Scheduller SMS"  title="Scheduller SMS" action="#{homeController.doRedirectSchedullerSms()}"/>
-                        <p:commandButton value="SMS History"  title="SMS History"/>
-                        <p:commandButton value="Modem Config" title="Modem Config" action="#{homeController.doRedirectModemConfig()}"/>
-                    </h:panelGrid>
-                </div>
-            </p:cache>
-        </h:form>
+            </ui:define>
+        </ui:composition>
 
-        <p:outputLabel value="Scheduller SMS" style="font-size: 16px;margin-left: 10px;font-weight: bold;color: #006600" />
-        <h:form id="smsFormId">
-            <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 20px">   
-                <h:panelGrid columns="2"  cellpadding="1" cellspacing="4" id="modemFormInputId">
-                    <p:outputLabel value="Nama Schedule" for="nameId"/>
-                    <p:outputLabel value="Jenis Schedule" for="scheduleType"/>
-                    <p:inputText  id="nameId" style="width: 247px"  required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.name}"/>
-                    <p:selectOneMenu id="scheduleType"  value="#{schedullerSendingSMSController.schedullerSmsModel.scheduleType}"
-                                     required="true" label="Pilihan Modem"
-                                     style="text-align: left;width:180px" >
-                        <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
-                        <f:selectItem itemLabel="Diulang" itemValue="REPEAT"/>
-                        <f:selectItem itemLabel="Sekali Kirim" itemValue="ONETIME"/>
-                        <p:ajax listener="#{schedullerSendingSMSController.changeScheduleType()}" update="pengulanganId"  partialSubmit="true" process="@this"/>
-                    </p:selectOneMenu>
-                    <p:outputLabel value="Kondisi Pengulangan" for="pengulanganId"/>
-
-                    <p:outputLabel value="Tanggal Kirim" for="sendDate"/>
-                    <p:selectOneMenu id="pengulanganId"  value="#{schedullerSendingSMSController.schedullerSmsModel.isRepeatOnCondition}" disabled="#{schedullerSendingSMSController.isDisable}"
-                                     required="true" label="Pilihan Modem"
-                                     style="text-align: left;width: 250px" >
-                        <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
-                        <f:selectItem itemLabel="Setiap Hari" itemValue="EVERYDAY"/>
-                        <f:selectItem itemLabel="Setiap Minggu" itemValue="EVERYWEEK"/>
-                        <f:selectItem itemLabel="Setiap Bulan" itemValue="EVERYMONTH" />
-                        <f:selectItem itemLabel="Setiap Tahun" itemValue="EVERYYEAR" />
-                        <f:selectItem itemLabel="Waktu Tertentu" itemValue="ONETIME" />
-
-                    </p:selectOneMenu>
-                    <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
-
-                    <p:outputLabel value=" Pengulangan " for="timeSend" />
-                    <p:outputLabel value="Waktu Kirim " for="timeSend" />
-                    <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}" readonly="true"/>
-                    <pe:timePicker intervalMinutes="10" id="timeSend" required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.sendTime}"/>
-
-
-
-                    <p:outputLabel value="Jenis Modem" for="modemId"/>
-                    <p:outputLabel value="Kirim Ke" for="sendId"/>
-                    <p:selectOneMenu id="modemId"  value="#{schedullerSendingSMSController.schedullerSmsModel.modemId}"
-                                     required="true" label="Pilihan Modem"
-                                     style="text-align: left;width: 250px" >
-                        <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
-                        <f:selectItems value="#{sendingSMSController.mapOfModem}"/>
-                    </p:selectOneMenu>
-                    <h:panelGroup>
-                        <p:inputText value="#{schedullerSendingSMSController.schedullerSmsModel.listPhoneAsString}"  placeholder="NO HP" id="sendId" required="true" style="width: 250px" readonly="true"/>
-                        <p:commandButton value="+"  style="margin-left: 5px"  oncomplete="PF('addDialogSMS').show()" immediate="true"/>
-                    </h:panelGroup>
-                </h:panelGrid> 
-                <h:panelGrid columns="1">
-                    <p:outputLabel value="Isi SMS" for="isiSms"/>
-                    <p:inputTextarea id="isiSms" rows="4" cols="20" counter="counter" maxlength="150" value="#{schedullerSendingSMSController.schedullerSmsModel.smsContent}" required="true"
-                                     style="width: 545px; height: 90px;" counterTemplate="{0} sisa karakter" autoResize="true" label="SMS" title="SMS"/>
-
-                    <p:outputLabel/>
-                    <p:outputLabel id="counter"/>
-                </h:panelGrid>
-                <h:panelGrid columns="2">
-                    <p:commandButton value="Simpan" icon="ui-icon-disk" action="#{schedullerSendingSMSController.saveSchedule()}" update="smsFormId,:growlSchedullerId,:tableViewId" />
-                    <p:commandButton value="Batal" title="Batal" process="@this" update="smsFormId" action="#{schedullerSendingSMSController.doReset()}" immediate="true"
-                                     icon="ui-icon-refresh" styleClass="isitext_hrm"  style="margin-right: 5px" >  
-                        <p:resetInput target="smsFormId" />  
-                    </p:commandButton>
-
-                </h:panelGrid>
-            </div>
-
-        </h:form>
-        <p:dialog widgetVar="addDialogSMS" header="Tambah No.HP" modal="true" width="375" dynamic="true" 
-                  appendTo="@(body)" resizable="false"   closeOnEscape="true" >
+        <!--        <p:growl globalOnly="true" id="growlModemConfig" showSummary="true" showDetail="true"/>
+        
+                <h:form id="headarId">
+                    <p:cache  region="testcache">
+                        <div id="header_login">
+                            <div id="header_login_left">
+                                <p:outputLabel value="SMS" style="color: #33cc00;font-weight: bold;font-size: 14px"/> 
+                                <p:outputLabel value="Gateway" style="color: #ffffff;margin-left: 4px"/>
+                            </div>
+                            <div style="float: right;padding-top: 7px;margin-right: 5px">
+                                <p:commandButton value="Logout" style="font-family:Trebuchet MS;font-size: 13px" icon="ui-icon-power"/>
+                            </div>
+                        </div>
+                        <div id="header_menu" style="margin-bottom: 10px" >
+                            <h:panelGrid style="font-size: 12px;padding-top: 6px" columns="4" id="menuId">
+                                <p:commandButton value="Kirim SMS"  title="Kirim SMS" action="#{homeController.doRedirectSms()}"/>
+                                <p:commandButton value="Scheduller SMS"  title="Scheduller SMS" action="#{homeController.doRedirectSchedullerSms()}"/>
+                                <p:commandButton value="SMS History"  title="SMS History"/>
+                                <p:commandButton value="Modem Config" title="Modem Config" action="#{homeController.doRedirectModemConfig()}"/>
+                            </h:panelGrid>
+                        </div>
+                    </p:cache>
+                </h:form>
+        
+                <p:outputLabel value="Scheduller SMS" style="font-size: 16px;margin-left: 10px;font-weight: bold;color: #006600" />
+                <h:form id="smsFormId">
+                    <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 20px">   
+                        <h:panelGrid columns="2"  cellpadding="1" cellspacing="4" id="modemFormInputId">
+                            <p:outputLabel value="Nama Schedule" for="nameId"/>
+                            <p:outputLabel value="Jenis Schedule" for="scheduleType"/>
+                            <p:inputText  id="nameId" style="width: 247px"  required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.name}"/>
+                            <p:selectOneMenu id="scheduleType"  value="#{schedullerSendingSMSController.schedullerSmsModel.scheduleType}"
+                                             required="true" label="Pilihan Modem"
+                                             style="text-align: left;width:180px" >
+                                <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                <f:selectItem itemLabel="Diulang" itemValue="REPEAT"/>
+                                <f:selectItem itemLabel="Sekali Kirim" itemValue="ONETIME"/>
+                                <p:ajax listener="#{schedullerSendingSMSController.changeScheduleType()}" update="pengulanganId"  partialSubmit="true" process="@this"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Kondisi Pengulangan" for="pengulanganId"/>
+        
+                            <p:outputLabel value="Tanggal Kirim" for="sendDate"/>
+                            <p:selectOneMenu id="pengulanganId"  value="#{schedullerSendingSMSController.schedullerSmsModel.isRepeatOnCondition}" disabled="#{schedullerSendingSMSController.isDisable}"
+                                             required="true" label="Pilihan Modem"
+                                             style="text-align: left;width: 250px" >
+                                <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                <f:selectItem itemLabel="Setiap Hari" itemValue="EVERYDAY"/>
+                                <f:selectItem itemLabel="Setiap Minggu" itemValue="EVERYWEEK"/>
+                                <f:selectItem itemLabel="Setiap Bulan" itemValue="EVERYMONTH" />
+                                <f:selectItem itemLabel="Setiap Tahun" itemValue="EVERYYEAR" />
+                                <f:selectItem itemLabel="Waktu Tertentu" itemValue="ONETIME" />
+        
+                            </p:selectOneMenu>
+                            <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
+        
+                            <p:outputLabel value=" Pengulangan " for="timeSend" />
+                            <p:outputLabel value="Waktu Kirim " for="timeSend" />
+                            <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}" readonly="true"/>
+                            <pe:timePicker intervalMinutes="10" id="timeSend" required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.sendTime}"/>
+        
+        
+        
+                            <p:outputLabel value="Jenis Modem" for="modemId"/>
+                            <p:outputLabel value="Kirim Ke" for="sendId"/>
+                            <p:selectOneMenu id="modemId"  value="#{schedullerSendingSMSController.schedullerSmsModel.modemId}"
+                                             required="true" label="Pilihan Modem"
+                                             style="text-align: left;width: 250px" >
+                                <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                <f:selectItems value="#{sendingSMSController.mapOfModem}"/>
+                            </p:selectOneMenu>
+                            <h:panelGroup>
+                                <p:inputText value="#{schedullerSendingSMSController.schedullerSmsModel.listPhoneAsString}"  placeholder="NO HP" id="sendId" required="true" style="width: 250px" readonly="true"/>
+                                <p:commandButton value="+"  style="margin-left: 5px"  oncomplete="PF('addDialogSMS').show()" immediate="true"/>
+                            </h:panelGroup>
+                        </h:panelGrid> 
+                        <h:panelGrid columns="1">
+                            <p:outputLabel value="Isi SMS" for="isiSms"/>
+                            <p:inputTextarea id="isiSms" rows="4" cols="20" counter="counter" maxlength="150" value="#{schedullerSendingSMSController.schedullerSmsModel.smsContent}" required="true"
+                                             style="width: 545px; height: 90px;" counterTemplate="{0} sisa karakter" autoResize="true" label="SMS" title="SMS"/>
+        
+                            <p:outputLabel/>
+                            <p:outputLabel id="counter"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:commandButton value="Simpan" icon="ui-icon-disk" action="#{schedullerSendingSMSController.saveSchedule()}" update="smsFormId,:growlModemConfig,:tableViewId" />
+                            <p:commandButton value="Batal" title="Batal" process="@this" update="smsFormId" action="#{schedullerSendingSMSController.doReset()}" immediate="true"
+                                             icon="ui-icon-refresh" styleClass="isitext_hrm"  style="margin-right: 5px" >  
+                                <p:resetInput target="smsFormId" />  
+                            </p:commandButton>
+        
+                        </h:panelGrid>
+                    </div>
+        
+                </h:form>
+-->                        <p:dialog widgetVar="addDialogSMS" header="Tambah No.HP" modal="true" width="375" dynamic="true" 
+                                     appendTo="@(body)" resizable="false"   closeOnEscape="true" >
             <h:form id="addId">
                 <p:messages/>
                 <h:panelGrid  columns="4">
                     <p:outputLabel value="No. HP"/>
                     <p:outputLabel value=":"  />
                     <p:inputText  value="#{schedullerSendingSMSController.schedullerSmsModel.destination}" placeholder="Contoh : +8787878787"/>
-                    <p:commandButton value="Tambah" action="#{schedullerSendingSMSController.doAdd()}" id="yesId" title="Ya" update=":smsFormId:sendId,addId"
+                    <p:commandButton value="Tambah" action="#{schedullerSendingSMSController.doAdd()}" id="yesId" title="Ya"
                                      style="margin-right: 5px" />
                 </h:panelGrid>
                 <p:focus for="addId" />
             </h:form>
-        </p:dialog>
+        </p:dialog><!--
         <h:form id="tableViewId">
 
             <p:separator style="margin-left: 20px;margin-right: 20px" />
@@ -172,7 +275,7 @@
                             <h:outputText value="Pukul"/>
                         </f:facet>
                         <p:outputLabel value= "#{tastDefinitions.time}" >
-                            <!--<f:convertDateTime pattern="hh:mm:ss"  type="time" timeZone="gmt+7"/>-->
+                            <f:convertDateTime pattern="hh:mm:ss"  type="time" timeZone="gmt+7"/>
                         </p:outputLabel>
                     </p:column>
                     <p:column sortBy="name" >
@@ -247,7 +350,7 @@
         </p:dialog>
         <p:dialog modal="true" widgetVar="statusDialog" header="#{appmsg['global.waiting']}" draggable="false" closable="false" resizable="false">
             <div align="center"><h:graphicImage library="images" name="waiting.gif"/></div>
-        </p:dialog>
+        </p:dialog>-->
     </h:body>
 </html>
 

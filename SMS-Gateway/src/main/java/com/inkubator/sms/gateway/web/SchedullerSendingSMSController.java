@@ -60,7 +60,7 @@ public class SchedullerSendingSMSController extends BaseController {
         this.schedullerSmsModel = schedullerSmsModel;
     }
 
-    public void saveSchedule() {
+    public String saveSchedule() {
         if (schedullerSmsModel.getSendDate().equals(new Date()) || schedullerSmsModel.getSendDate().before(new Date())) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Proses Simpan", "Tanggal pengiriman tidak boleh hari Ini atau kemarin");
             FacesUtil.getFacesContext().addMessage(null, msg);
@@ -70,16 +70,20 @@ public class SchedullerSendingSMSController extends BaseController {
                 this.taskDefinitionService.save(definition);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Proses Simpan", "Schedule pengiriman sms berhasil disimpan");
                 FacesUtil.getFacesContext().addMessage(null, msg);
+                FacesUtil.getExternalContext().getFlash().setKeepMessages(true);
                 initialization();
+                return "/protected/scheduller_sms_view.htm?faces-redirect=true";
             } catch (Exception ex) {
                 LOGGER.error(ex, ex);
             }
         }
 
+        return null;
     }
 
     public void doReset() {
         schedullerSmsModel = new SchedullerSmsModel();
+        schedullerSmsModel.setRepeatTime(0);
 
     }
 
@@ -198,15 +202,15 @@ public class SchedullerSendingSMSController extends BaseController {
         schedullerSmsModel.setListPhone(dataTosave);
         return schedullerSmsModel;
     }
-    
-    public void onDelete(){
-        
+
+    public void onDelete() {
+
     }
-    
-    public void doDelete(){
+
+    public void doDelete() {
         try {
             this.taskDefinitionService.delete(selectedTaskDefinition);
-            lazyDataModel=null;
+            lazyDataModel = null;
         } catch (Exception ex) {
             LOGGER.error(ex, ex);
         }

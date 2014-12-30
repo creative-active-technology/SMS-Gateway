@@ -30,7 +30,7 @@ public class SendingSMSViewController extends BaseController {
     @Override
     public void initialization() {
         super.initialization();
-        
+
     }
 
     public void setSmsActivityService(SmsActivityService smsActivityService) {
@@ -56,7 +56,11 @@ public class SendingSMSViewController extends BaseController {
         this.parameter = parameter;
     }
 
-    public String doAddSms(){
-         return "/protected/sending_sms.htm?faces-redirect=true";
+    public String doAddSms() {
+        return "/protected/sending_sms.htm?faces-redirect=true";
+    }
+
+    public String doAddSchedule() {
+        return "/protected/scheduller_sms.htm?faces-redirect=true";
     }
 }
