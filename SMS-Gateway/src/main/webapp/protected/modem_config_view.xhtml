@@ -20,25 +20,25 @@
                     <p:growl id="modemFormId" showDetail="true" showSummary="true" globalOnly="true" />
                     <h:form id="modemViewFormId">
                         <div style="margin: 10px">
-                            <p:outputLabel value="Modem"  style="font-size: 24px;font-family: Verdana;color: #003333" />
-                            <p:outputLabel value="Daftar modem dan konfigurasi"  style="font-size: 11px;margin-left: 5px" />
+                            <p:outputLabel value="#{appmsg['modem.modem']}"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <p:outputLabel value="#{appmsg['modem.modem_list_and_configuration']}"  style="font-size: 11px;margin-left: 5px" />
                         </div>
                         <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
-                            <p:menuitem value="Daftar Modem"  url="/protected/home.htm" />
-                            <p:menuitem value="Daftar Modem"  url="/protected/modem_config_view.htm" />
+                            <p:menuitem value="#{appmsg['modem.modem_list']}"  url="/protected/home.htm" />
+                            <p:menuitem value="#{appmsg['modem.modem_list']}"  url="/protected/modem_config_view.htm" />
                         </p:breadCrumb>
                         <p:focus for="pecarianTxtid" />
                         <div style="margin-top: 10px;clear: both" />
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: left">
-                            <p:outputLabel value="Pencarian" style="font-weight: bold"/>
+                            <p:outputLabel value="#{appmsg['modem.search']}" style="font-weight: bold"/>
                             <p:outputLabel value=":" style="font-weight: bold"/>
                             <p:inputText  placeholder="Full Text Service"  style="width: 260px"  id="pecarianTxtid" value="#{modemViewController.param}"/>
                             <p:commandButton value="Cari"  icon="ui-icon-search" action="#{modemViewController.doSearch()}" update="tableModemId"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
-                            <p:commandButton value="Tambah"  icon="ui-icon-plus" action="#{modemViewController.doAdd()}"/>
-                            <p:commandButton value="Aktifkan Modem"  icon="ui-icon-signal-diag"  title="Aktifkan Semua Modem"/>
-                            <p:commandButton value="Matikan Service"  icon="ui-icon-signal"  title="Matikan  Semua Service Modem"/>
+                            <p:commandButton value="#{appmsg['global.add']}"  icon="ui-icon-plus" action="#{modemViewController.doAdd()}"/>
+                            <p:commandButton value="#{appmsg['modem.activate_modem']}"  icon="ui-icon-signal-diag"  title="Aktifkan Semua Modem"/>
+                            <p:commandButton value="#{appmsg['modem.turn_off_service']}"  icon="ui-icon-signal"  title="Matikan  Semua Service Modem"/>
                         </h:panelGrid>
                         <div style="clear: both" />
                         <p:dataTable value="#{modemViewController.dataModemDefinitions}" var="modem"  rowIndexVar="no" style="margin-left: 10px; margin-right: 10px;margin-top: 5px" id="tableModemId">
