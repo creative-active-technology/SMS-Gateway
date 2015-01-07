@@ -32,15 +32,15 @@
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: left">
                             <p:outputLabel value="Pencarian" style="font-weight: bold"/>
                             <p:outputLabel value=":" style="font-weight: bold"/>
-                            <p:inputText  placeholder="Full Text Service"  style="width: 260px"  id="pecarianTxtid" value="#{modemViewController.param}"/>
-                            <p:commandButton value="Cari"  icon="ui-icon-search" action="#{modemViewController.doSearch()}" />
+                            <p:inputText  placeholder="Full Text Service"  style="width: 260px"  id="pecarianTxtid" value="#{schedullerViewController.pencarian}"/>
+                            <p:commandButton value="Cari"  icon="ui-icon-search" action="#{schedullerViewController.doSearch()}" />
                         </h:panelGrid>
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
                             <p:commandButton value="Kirim SMS"  icon="fa fa-envelope-o" action="#{sendingSMSViewController.doAddSms()}"/>
                             <p:commandButton value="Penjadwalan SMS"  icon="fa fa-calendar" action="#{sendingSMSViewController.doAddSchedule()}"/>
                         </h:panelGrid>
                         <div style="clear: both" />
-                        <p:dataTable value="#{schedullerSendingSMSController.lazyDataModel}" var="tastDefinitions" lazy="true" paginator="true" pageLinks="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {PageLinks} {NextPageLink} {LastPageLink}"
+                        <p:dataTable value="#{schedullerViewController.lazyDataModel}" var="tastDefinitions" lazy="true" paginator="true" pageLinks="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {PageLinks} {NextPageLink} {LastPageLink}"
                                      rows="5" rowsPerPageTemplate="5,7,11,15,21,25,31" style="margin: 10px" id="tableScheduleId" 
                                      rowIndexVar="no">
                             <f:facet name="header">  
@@ -111,19 +111,19 @@
                                 </p:commandButton>
                                 - 
                                 <p:commandButton  icon="ui-icon-trash" title="#{appmsg['global.delete']}" label="#{appmsg['global.delete']}"  style="font-size: 10px!important"  update=":deleteDialogFormId"
-                                                  onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" action="#{schedullerSendingSMSController.onDelete()}" >
-                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerSendingSMSController.selectedTaskDefinition}" />
+                                                  onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" action="#{schedullerViewController.onDelete()}" >
+                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerViewController.selectedTaskDefinition}" />
                                 </p:commandButton>
                                 -
                                 <p:commandButton  icon="ui-icon-folder-open" title="#{appmsg['global.edit']}" label="#{appmsg['global.edit']}" style="font-size: 10px!important" 
-                                                  action="#{schedullerSendingSMSController.doEdit()}">
-                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerSendingSMSController.selectedTaskDefinition}" />
+                                                  action="#{schedullerViewController.doEdit()}">
+                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerViewController.selectedTaskDefinition}" />
 
                                 </p:commandButton> 
                             </p:column>        
                             <f:facet name="footer">
                                 <p:outputLabel value="Total : "/>
-                                <p:outputLabel value="#{schedullerSendingSMSController.lazyDataModel.rowCount}"/>
+                                <p:outputLabel value="#{schedullerViewController.lazyDataModel.rowCount}"/>
                                 <p:outputLabel value="Data" style="margin-left: 3px"/>
                             </f:facet>  
                         </p:dataTable>
