@@ -20,31 +20,31 @@
                     <p:growl globalOnly="true" id="growlModemConfig" showSummary="true" showDetail="true"/>
                     <h:form id="smsFormId">
                         <div style="margin: 10px">
-                            <p:outputLabel value="Modem Form"  style="font-size: 24px;font-family: Verdana;color: #003333" />
-                            <p:outputLabel value="Form Input Konfigurasi Modem"  style="font-size: 11px;margin-left: 5px" />
+                            <p:outputLabel value="#{appmsg['modem.modem_form']}"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <p:outputLabel value="#{appmsg['modem.modem_configuration_input_form']}"  style="font-size: 11px;margin-left: 5px" />
                         </div>
                         <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
                             <p:menuitem value="Home"  url="/protected/home.htm" />
-                            <p:menuitem value="Daftar Pengiriman SMS"  url="/protected/sending_sms_history.htm" />
-                            <p:menuitem value="Kirim SMS"  url="/protected/sending_sms.htm" />
+                            <p:menuitem value="#{appmsg['sms.sms_sent_list']}"  url="/protected/sending_sms_history.htm" />
+                            <p:menuitem value="#{appmsg['sms.sent_sms']}"  url="/protected/sending_sms.htm" />
 
                         </p:breadCrumb>
                         <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 30px">   
                             <h:panelGrid columns="1"  cellpadding="2" cellspacing="1" id="modemFormInputId">
-                                <p:outputLabel value="Kirim Ke" for="sendId"/>
+                                <p:outputLabel value="#{appmsg['sms.sent_to']}" for="sendId"/>
                                 <h:panelGroup>
                                     <p:inputText value="#{sendingSMSController.smsSendModel.listPhoneAsString}"  placeholder="NO HP" id="sendId" required="true" style="width: 250px" readonly="true"/>
                                     <p:commandButton value="+"  style="margin-left: 5px"  oncomplete="PF('addDialogSMS').show()" immediate="true"/>
                                 </h:panelGroup>
-                                <p:outputLabel value="Jenis Modem" for="modemId"/>
+                                <p:outputLabel value="#{appmsg['modem.modem_type']}" for="modemId"/>
                                 <p:selectOneMenu id="modemId"  value="#{sendingSMSController.smsSendModel.modemId}"
-                                                 required="true" label="Pilihan Modem"
+                                                 required="true" label="#{appmsg['modem.modem_choice']}"
                                                  style="text-align: left;width: 250px" >
-                                    <f:selectItem itemLabel="Silahkan Pilih" itemValue="" />
+                                    <f:selectItem itemLabel="#{appmsg['sms.please_choose']}" itemValue="" />
                                     <f:selectItems value="#{sendingSMSController.mapOfModem}"/>
 
                                 </p:selectOneMenu>
-                                <p:outputLabel value="Isi SMS" for="smsContent"/>
+                                <p:outputLabel value="#{appmsg['sms.sms_content']}" for="smsContent"/>
                                 <p:inputTextarea id="smsContent" rows="4" cols="20" counter="counter" maxlength="150" value="#{sendingSMSController.smsSendModel.smsContent}" required="true"
                                                  style="width: 250px; height: 90px;" counterTemplate="{0} sisa karakter" autoResize="true" label="SMS" title="SMS"/>
 
@@ -52,8 +52,8 @@
                                 <p:outputLabel id="counter"/>
                             </h:panelGrid> 
                             <h:panelGrid columns="2">
-                                <p:commandButton value="Kirim" icon="ui-icon-disk" action="#{sendingSMSController.doSend()}" update="modemFormInputId,:growlModemConfig" />
-                                <p:commandButton value="Batal" title="Batal" process="@this" update="modemFormInputId" action="#{sendingSMSController.doReset()}"
+                                <p:commandButton value="#{appmsg['sms.sent']}" icon="ui-icon-disk" action="#{sendingSMSController.doSend()}" update="modemFormInputId,:growlModemConfig" />
+                                <p:commandButton value="#{appmsg['global.cancel']}" title="Batal" process="@this" update="modemFormInputId" action="#{sendingSMSController.doReset()}"
                                                  icon="ui-icon-refresh" styleClass="isitext_hrm"  style="margin-right: 5px" >  
                                     <p:resetInput target="modemFormInputId" />  
                                 </p:commandButton>
@@ -61,15 +61,15 @@
                             </h:panelGrid>
                         </div>
                     </h:form>
-                    <p:dialog widgetVar="addDialogSMS" header="Tambah No.HP" modal="true" width="375" dynamic="true" 
+                    <p:dialog widgetVar="addDialogSMS" header="#{appmsg['sms.add_phone_no']}" modal="true" width="375" dynamic="true" 
                               appendTo="@(body)" resizable="false"   closeOnEscape="true" >
                         <h:form id="addId">
                             <p:messages/>
                             <h:panelGrid  columns="4">
-                                <p:outputLabel value="No. HP"/>
+                                <p:outputLabel value="#{appmsg['sms.phone_no']}"/>
                                 <p:outputLabel value=":"  />
-                                <p:inputText  value="#{sendingSMSController.smsSendModel.phoneNumber}" placeholder="Contoh : +8787878787"/>
-                                <p:commandButton value="Tambah" action="#{sendingSMSController.doAdd()}" id="yesId" title="Ya" update=":smsFormId:sendId,addId"
+                                <p:inputText  value="#{sendingSMSController.smsSendModel.phoneNumber}" placeholder="#{appmsg['sms.sample_info_1']}"/>
+                                <p:commandButton value="#{appmsg['global.add']}" action="#{sendingSMSController.doAdd()}" id="yesId" title="Ya" update=":smsFormId:sendId,addId"
                                                  style="margin-right: 5px" />
                             </h:panelGrid>
                             <p:focus for="addId" />
