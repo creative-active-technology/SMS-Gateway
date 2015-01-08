@@ -86,7 +86,7 @@
                 <!--                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
                 <prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>-->
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.FSDirectoryProvider</prop>
-                <prop key="hibernate.search.default.indexBase">C:/lucen</prop>
+                <prop key="hibernate.search.default.indexBase">/media/deni/SOURCE/inkubator-hrm/smsgateway/lucen</prop>
                 <!--                <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>

@@ -189,5 +189,17 @@ public class LoginHistoryServiceImpl extends IServiceImpl implements LoginHistor
     public List<LoginHistory> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<LoginHistory> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) throws Exception {
+        return loginHistoryDao.getAllByFullTextService(parameter, minResult, maxResult, order);
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 30)
+    public Integer getTotalByFullTextService(String parameter) throws Exception {
+        return loginHistoryDao.getTotalByFullTextService(parameter);
+    }
     
 }
