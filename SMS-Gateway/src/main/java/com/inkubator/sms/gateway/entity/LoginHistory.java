@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
@@ -29,7 +30,6 @@ public class LoginHistory implements java.io.Serializable {
     private Date logOutDate;
     private String ipAddress;
     private String languange;
-   
 
     public LoginHistory() {
     }
@@ -48,7 +48,7 @@ public class LoginHistory implements java.io.Serializable {
     }
 
     @Id
-
+    @DocumentId
     @Column(name = "id", unique = true, nullable = false)
     public long getId() {
         return this.id;
@@ -106,7 +106,5 @@ public class LoginHistory implements java.io.Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
-    
 
 }
