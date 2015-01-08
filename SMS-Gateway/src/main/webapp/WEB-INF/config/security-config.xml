@@ -12,7 +12,7 @@
                              authentication-failure-url="/?login_error=1" always-use-default-target="true"/>
         <security:intercept-url pattern="/protected/*" access="isAuthenticated()"/>
         <security:intercept-url pattern="/flow-protected/**" access="hasAnyRole('ADMINISTRATOR_ROLE','ROLE_USER_HRM','BASIC_USER','SUPERVISOR_FINANCE_ROLE')"/>
-        <security:intercept-url pattern="/protected/**" access="hasAnyRole('ADMINISTRATOR_ROLE','ROLE_USER_HRM','BASIC_USER','SUPERVISOR_FINANCE_ROLE')"/>
+        <!--<security:intercept-url pattern="/protected/**" access="hasAnyRole('ADMINISTRATOR_ROLE','ROLE_USER_HRM','BASIC_USER','SUPERVISOR_FINANCE_ROLE')"/>-->
         <security:session-management>
             <security:concurrency-control max-sessions="2" error-if-maximum-exceeded="true" session-registry-alias="sessionRegistry"/>
         </security:session-management>
