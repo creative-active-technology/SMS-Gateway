@@ -132,9 +132,9 @@ public class User  implements java.io.Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+ 
     
-    @Column(name="password", length=65535)
+    @Column(name="password", length=65535,columnDefinition = "Text")
     public String getPassword() {
         return this.password;
     }
