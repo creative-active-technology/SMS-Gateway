@@ -9,13 +9,17 @@ import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.sms.gateway.SMSGATEWAY;
 import com.inkubator.sms.gateway.entity.Role;
 import com.inkubator.sms.gateway.entity.User;
+import com.inkubator.sms.gateway.entity.UserRole;
+import com.inkubator.sms.gateway.entity.UserRoleId;
 import com.inkubator.sms.gateway.service.RoleService;
 import com.inkubator.sms.gateway.service.UserService;
 import com.inkubator.sms.gateway.web.model.UserModel;
 import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
 import com.inkubator.webcore.util.MessagesResourceUtil;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
@@ -140,16 +144,16 @@ public class UserFormController extends BaseController {
 //                        FacesUtil.getSessionAttribute(HRMConstant.BAHASA_ACTIVE).toString());
 //                return null;
 //            } else {
-//                Set<HrmUserRole> dataToSave = new HashSet<>();
-//                List<HrmRole> hrmRoles = dualListModel.getTarget();
-//                for (HrmRole hrmRole : hrmRoles) {
-//                    HrmUserRole hrmUserRole = new HrmUserRole();
-//                    hrmUserRole.setId(new HrmUserRoleId(hrmUser.getId(), hrmRole.getId()));
-//                    hrmUserRole.setHrmRole(hrmRole);
-//                    hrmUserRole.setHrmUser(hrmUser);
-//                    dataToSave.add(hrmUserRole);
-//                }
-//                hrmUser.setHrmUserRoles(dataToSave);
+                Set<UserRole> dataToSave = new HashSet<>();
+                List<Role> roles = dualListModel.getTarget();
+                for (Role role : roles) {
+                    UserRole userRole = new UserRole();
+                    userRole.setId(new UserRoleId(user.getId(), role.getId()));
+                    userRole.setRole(role);
+                    userRole.setUser(user);
+                    dataToSave.add(userRole);
+                }
+                user.setUserRoles(dataToSave);
             userService.saveAndNotification(user);
             MessagesResourceUtil.setMessagesFlas(FacesMessage.SEVERITY_INFO, "global.save_info", "global.added_successfully",
                     FacesUtil.getSessionAttribute(SMSGATEWAY.BAHASA_ACTIVE).toString());
