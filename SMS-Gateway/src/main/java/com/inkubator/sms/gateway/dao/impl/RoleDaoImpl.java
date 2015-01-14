@@ -6,7 +6,7 @@
 package com.inkubator.sms.gateway.dao.impl;
 
 import com.inkubator.datacore.dao.impl.IDAOImpl;
-import com.inkubator.sms.gateway.dao.RoleDaoA;
+import com.inkubator.sms.gateway.dao.RoleDao;
 import com.inkubator.sms.gateway.entity.Role;
 import java.util.List;
 import org.apache.lucene.search.Query;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(value = "roleDao")
 @Lazy
-public class RoleDaoImplA extends IDAOImpl<Role> implements RoleDaoA{
+public class RoleDaoImpl extends IDAOImpl<Role> implements RoleDao{
     private static final long serialVersionUID = -3838059330383642763L;
 
     @Override

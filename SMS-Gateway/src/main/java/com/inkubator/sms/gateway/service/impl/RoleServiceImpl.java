@@ -7,7 +7,7 @@ package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
 import com.inkubator.sms.gateway.entity.Role;
-import com.inkubator.sms.gateway.service.RoleServiceA;
+import com.inkubator.sms.gateway.service.RoleService;
 import java.util.List;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Lazy;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service(value = "roleService")
 @Lazy
-public class RoleServiceImplA extends IServiceImpl implements RoleServiceA{
+public class RoleServiceImpl extends IServiceImpl implements RoleService{
 
     @Override
     public Role getEntiyByPK(String string) throws Exception {
