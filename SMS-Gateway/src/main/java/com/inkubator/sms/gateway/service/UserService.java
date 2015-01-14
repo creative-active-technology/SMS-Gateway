@@ -19,4 +19,6 @@ public interface UserService extends IService<User> {
     public List<User> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) throws Exception;
 
     public Integer getTotalByFullTextService(String parameter) throws Exception;
+    
+    public void saveAndNotification(User user) throws Exception;
 }
