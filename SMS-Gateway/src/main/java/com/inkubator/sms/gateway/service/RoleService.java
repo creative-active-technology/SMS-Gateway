@@ -12,7 +12,7 @@ import com.inkubator.sms.gateway.entity.Role;
  *
  * @author EKA
  */
-public interface RoleServiceA extends IService<Role> { 
+public interface RoleService extends IService<Role> { 
     
     
 }
