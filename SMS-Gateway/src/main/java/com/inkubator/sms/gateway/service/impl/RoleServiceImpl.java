@@ -6,12 +6,17 @@
 package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.dao.RoleDao;
 import com.inkubator.sms.gateway.entity.Role;
 import com.inkubator.sms.gateway.service.RoleService;
 import java.util.List;
 import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -21,6 +26,9 @@ import org.springframework.stereotype.Service;
 @Lazy
 public class RoleServiceImpl extends IServiceImpl implements RoleService{
 
+    @Autowired
+    private RoleDao roleDao;
+    
     @Override
     public Role getEntiyByPK(String string) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -142,8 +150,9 @@ public class RoleServiceImpl extends IServiceImpl implements RoleService{
     }
 
     @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 30)
     public List<Role> getAllData() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roleDao.getAllData();
     }
 
     @Override
