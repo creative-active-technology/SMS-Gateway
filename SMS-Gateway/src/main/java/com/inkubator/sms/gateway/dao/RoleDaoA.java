@@ -14,8 +14,9 @@ import org.hibernate.criterion.Order;
  *
  * @author EKA
  */
-public interface RoleDao extends IDAO<Role>{
+public interface RoleDaoA extends IDAO<Role>{
     public List<Role> getAllByFullTextService(String Parameter, int minResult, int maxResult, Order order);
     
     public Integer getTotalByFullTextService(String parameter);
+    
 }

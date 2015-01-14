@@ -7,7 +7,7 @@ package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
 import com.inkubator.sms.gateway.entity.Role;
-import com.inkubator.sms.gateway.service.RoleService;
+import com.inkubator.sms.gateway.service.RoleServiceA;
 import java.util.List;
 import org.hibernate.criterion.Order;
 import org.springframework.context.annotation.Lazy;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service(value = "roleService")
 @Lazy
-public class RoleServiceImpl extends IServiceImpl implements RoleService{
+public class RoleServiceImplA extends IServiceImpl implements RoleServiceA{
 
     @Override
     public Role getEntiyByPK(String string) throws Exception {
@@ -180,5 +180,4 @@ public class RoleServiceImpl extends IServiceImpl implements RoleService{
     public List<Role> getAllDataPageAbleIsActive(int i, int i1, Order order, Byte b) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }
