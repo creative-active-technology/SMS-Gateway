@@ -37,7 +37,6 @@ public class UserDaoImpl extends IDAOImpl<User> implements UserDao{
 
     @Override
     public List<User> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) {
-        System.out.println(parameter+"muahahahhahahha");
         FullTextSession fullTextSession = Search.getFullTextSession(getCurrentSession());
         org.apache.lucene.search.Sort sort;
         if (order.isAscending()) {
