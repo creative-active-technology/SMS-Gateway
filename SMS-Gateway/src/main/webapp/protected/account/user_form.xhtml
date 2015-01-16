@@ -30,64 +30,112 @@
 
                         </p:breadCrumb>
                         <div style="font-size: 12px;margin-left: 5px;margin-top: 10px;margin-left: 20px;margin-bottom: 20px">   
-                            <h:panelGrid columns="2"  cellpadding="1" cellspacing="4" id="modemFormInputId">
-                                <p:outputLabel value="#{appmsg['sms.schedule_name']}" for="nameId"/>
-                                <p:outputLabel value="#{appmsg['sms.schedule_type']}" for="scheduleType"/>
-                                <p:inputText  id="nameId" style="width: 247px"  required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.name}"/>
-                                <p:selectOneMenu id="scheduleType"  value="#{schedullerSendingSMSController.schedullerSmsModel.scheduleType}"
-                                                 required="true" label="#{appmsg['modem.modem_choice']}"
-                                                 style="text-align: left;width:180px" >
-                                    <f:selectItem itemLabel="#{appmsg['sms.please_choose']}" itemValue="" />
-                                    <f:selectItem itemLabel="#{appmsg['sms.repeat']}" itemValue="REPEAT"/>
-                                    <f:selectItem itemLabel="#{appmsg['sms.sent_once']}" itemValue="ONETIME"/>
-                                    <p:ajax listener="#{schedullerSendingSMSController.changeScheduleType()}" update="pengulanganId"  partialSubmit="true" process="@this"/>
-                                </p:selectOneMenu>
-                                <p:outputLabel value="#{appmsg['sms.repetition']}" for="pengulanganId"/>
+                            <p:panelGrid style="width: 100%;margin-bottom: 5px;margin-top: 20px" styleClass="grid_border3" >
+                                <p:row>
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_view.user_id']}"  for="userId" styleClass="label_hrm" />
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:inputText value="#{userFormController.userModel.userId}" styleClass="isitext_hrm" label="#{appmsg['user_view.user_id']}"
+                                                     style="width: 75%" required="true" id="userId" />
+                                        <p:message for="userId"/>
+                                    </p:column>
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important">
+                                        <p:outputLabel  value="#{appmsg['user_view.user_name']}" styleClass="label_hrm" for="realName"/>
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:inputText value="#{userFormController.userModel.realName}" styleClass="isitext_hrm" style="width: 75%" label="#{appmsg['user_view.user_name']}"
+                                                     required="true" id="realName"  />
+                                        <p:message for="realName"/>
+                                    </p:column>
+                                </p:row>
 
-                                <p:outputLabel value="#{appmsg['sms.sent_date']}" for="sendDate"/>
-                                <p:selectOneMenu id="pengulanganId"  value="#{schedullerSendingSMSController.schedullerSmsModel.isRepeatOnCondition}" disabled="#{schedullerSendingSMSController.isDisable}"
-                                                 required="true" label="Pilihan Modem"
-                                                 style="text-align: left;width: 250px" >
-                                    <f:selectItem itemLabel="#{appmsg['sms.please_choose']}" itemValue="" />
-                                    <f:selectItem itemLabel="#{appmsg['sms.every_day']}" itemValue="EVERYDAY"/>
-                                    <f:selectItem itemLabel="#{appmsg['sms.every_week']}" itemValue="EVERYWEEK"/>
-                                    <f:selectItem itemLabel="#{appmsg['sms.every_month']}" itemValue="EVERYMONTH" />
-                                    <f:selectItem itemLabel="#{appmsg['sms.every_year']}" itemValue="EVERYYEAR" />
-                                    <f:selectItem itemLabel="#{appmsg['sms.certain_time']}" itemValue="ONETIME" />
+                                <p:row>
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.email_address']}" styleClass="label_hrm" for="emailAddress"/>
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:inputText value="#{userFormController.userModel.emailAddress}" styleClass="isitext_hrm" style="width: 75%" label="#{appmsg['user_form.email_address']}"
+                                                     required="true" id="emailAddress" />
+                                        <p:message for="emailAddress"/>
+                                    </p:column>
 
-                                </p:selectOneMenu>
-                                <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
+                                    <p:column style="width: 13%;background-color: #e1f0f0 !important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.is_expired']}" styleClass="label_hrm" for="isExpired"/>
+                                    </p:column>
+                                    <p:column style="width: 37%" >
+                                        <p:selectBooleanButton value="#{userFormController.userModel.isExpired}" onLabel="#{appmsg['global.yes']}" offLabel="#{appmsg['global.no']}" onIcon="ui-icon-check" 
+                                                               offIcon="ui-icon-close"  id="isExpired" styleClass="label_button" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>                                
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.phone_number']}" styleClass="label_hrm" for="phone"/>
+                                    </p:column>
+                                    <p:column style="width: 37%" >
+                                        <p:inputText  value="#{userFormController.userModel.phoneNumber}" styleClass="isitext_hrm" style="width: 75%" label="#{appmsg['user_form.phone_number']}"
+                                                      required="true" id="phone"/>
+                                        <p:message for="phone"/>
+                                    </p:column>
 
-                                <p:outputLabel value=" #{appmsg['sms.repetition_1']} " for="timeSend" />
-                                <p:outputLabel value="#{appmsg['sms.sent_time']}" for="timeSend" />
-                                <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}" readonly="true"/>
-                                <pe:timePicker intervalMinutes="10" id="timeSend" required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.sendTime}"/>
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.is_active']}" styleClass="label_hrm" for="isActive"/>
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:selectBooleanButton value="#{userFormController.userModel.isActive}" onLabel="#{appmsg['global.yes']}" offLabel="#{appmsg['global.no']}" onIcon="ui-icon-check" 
+                                                               offIcon="ui-icon-close"  id="isActive" styleClass="label_button" />
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.password']}" styleClass="label_hrm" for="password"/>
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:password id="password" value="#{userFormController.userModel.password}" label="#{appmsg['user_form.password']}"
+                                                    feedback="true" maxlength="100"  match="checkpassword" 
+                                                    required="true" disabled="#{userFormController.isUpdate}" 
+                                                    style="width: 75%" >
+                                            <!--<f:validator validatorId="passwordComplexityValidator" />-->
+                                        </p:password>
+                                        <p:message for="password"/>
+                                    </p:column>
 
 
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form.is_lock']}" styleClass="label_hrm" for="isLock"/>
+                                    </p:column>
+                                    <p:column style="width: 37%">
+                                        <p:selectBooleanButton value="#{userFormController.userModel.isLock}" onLabel="#{appmsg['global.yes']}" offLabel="#{appmsg['global.no']}" onIcon="ui-icon-check" 
+                                                               offIcon="ui-icon-close"  id="isLock" styleClass="label_button" />
+                                    </p:column>
 
-                                <p:outputLabel value="#{appmsg['modem.modem_type']}" for="modemId"/>
-                                <p:outputLabel value="#{appmsg['sms.sent_to']}" for="sendId"/>
-                                <p:selectOneMenu id="modemId"  value="#{schedullerSendingSMSController.schedullerSmsModel.modemId}"
-                                                 required="true" label="Pilihan Modem"
-                                                 style="text-align: left;width: 250px" >
-                                    <f:selectItem itemLabel="#{appmsg['sms.please_choose']}" itemValue="" />
-                                    <f:selectItems value="#{sendingSMSController.mapOfModem}"/>
-                                </p:selectOneMenu>
-                                <h:panelGroup>
-                                    <p:inputText value="#{schedullerSendingSMSController.schedullerSmsModel.listPhoneAsString}"  placeholder="#{appmsg['sms.phone_no']}" id="sendId" required="true" style="width: 250px" readonly="true"/>
-                                    <p:commandButton value="+"  style="margin-left: 5px"  oncomplete="PF('addDialogSMS').show()" immediate="true"/>
-                                </h:panelGroup>
-                            </h:panelGrid> 
-                            <h:panelGrid columns="1">
-                                <p:outputLabel value="#{appmsg['sms.sms_content']}" for="isiSms"/>
-                                <p:inputTextarea id="isiSms" rows="4" cols="20" counter="counter" maxlength="150" value="#{schedullerSendingSMSController.schedullerSmsModel.smsContent}" required="true"
-                                                 style="width: 545px; height: 90px;" counterTemplate="{0} sisa karakter" autoResize="true" label="SMS" title="SMS"/>
+                                </p:row>
+                                <p:row>                                
+                                    <p:column style="width: 13%;background-color: #e1f0f0!important" >
+                                        <p:outputLabel  value="#{appmsg['user_form_check_password']}" styleClass="label_hrm" for="checkpassword"/>
+                                    </p:column>
+                                    <p:column style="width: 37%" >
+                                        <p:password id="checkpassword"  maxlength="100"
+                                                    feedback="false" 
+                                                    required="false" disabled="#{userFormController.isUpdate}"
+                                                    style="width: 75%">
+                                        </p:password>
+                                        <p:message for="checkpassword"/>
+                                    </p:column>
 
-                                <p:outputLabel/>
-                                <p:outputLabel id="counter"/>
-                            </h:panelGrid>
+
+                                </p:row>
+                            </p:panelGrid>
+                            <p:separator/>
+                            <div align="center">
+                                <p:pickList value="#{userFormController.dualListModel}" var="role" itemValue="#{role}" converter="roleConverter" id="picklistUserRoleId"
+                                            required="true"  style="margin-top: 15px;margin-bottom: 15px" label="#{appmsg['role_view.header1']}" styleClass="isitext_hrm"
+                                            itemLabel="#{role.roleName}" addAllLabel="#{appmsg['global.addAll']}"  addLabel="#{appmsg['global.add']}" removeAllLabel="#{appmsg['global.removeAll']}"
+                                            removeLabel="#{appmsg['global.remove']}"/>
+                                <p:message for="picklistUserRoleId" />
+                            </div>  
                             <h:panelGrid columns="2">
-                                <p:commandButton value="#{appmsg['global.save']}" icon="ui-icon-disk" action="#{schedullerSendingSMSController.saveSchedule()}" update="smsSchedulerId,:growlModemConfig" />
+                                <p:commandButton value="#{appmsg['global.save']}" icon="ui-icon-disk" action="#{userFormController.doSave()}" update="smsSchedulerId,:growlModemConfig" />
                                 <p:commandButton value="#{appmsg['global.cancel']}" title="Batal" process="@this" update="smsSchedulerId" action="#{schedullerSendingSMSController.doReset()}" immediate="true"
                                                  icon="ui-icon-refresh" styleClass="isitext_hrm"  style="margin-right: 5px" >  
                                     <p:resetInput target="smsSchedulerId" />  
@@ -209,7 +257,7 @@
         
                 </h:form>
         -->                        <p:dialog widgetVar="addDialogSMS" header="#{appmsg['sms.add_phone_no']}" modal="true" width="375" dynamic="true" 
-                                     appendTo="@(body)" resizable="false"   closeOnEscape="true" >
+                                             appendTo="@(body)" resizable="false"   closeOnEscape="true" >
             <h:form id="addId">
                 <p:messages/>
                 <h:panelGrid  columns="4">

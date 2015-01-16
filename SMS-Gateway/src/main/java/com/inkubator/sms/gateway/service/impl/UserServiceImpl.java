@@ -6,9 +6,11 @@
 package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.securitycore.util.UserInfoUtil;
 import com.inkubator.sms.gateway.dao.UserDao;
 import com.inkubator.sms.gateway.entity.User;
 import com.inkubator.sms.gateway.service.UserService;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,6 +201,15 @@ public class UserServiceImpl extends IServiceImpl implements UserService{
     @Override
     public List<User> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void saveAndNotification(User user) throws Exception {
+        String pass = user.getPassword();
+        user.setCreatedBy(UserInfoUtil.getUserName());
+        user.setCreatedOn(new Date());
+        userDao.save(user);
     }
     
 }
