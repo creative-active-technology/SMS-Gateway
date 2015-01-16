@@ -5,8 +5,10 @@
  */
 package com.inkubator.sms.gateway.web;
 
+import com.inkubator.common.notification.model.SerialGateWay;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.service.ModemDefinitionService;
+import com.inkubator.sms.gateway.service.impl.ModemManageService;
 import com.inkubator.webcore.controller.BaseController;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.smslib.Service;
 
 /**
  *
@@ -28,6 +31,8 @@ public class ModemViewController extends BaseController {
     private List<ModemDefinition> dataModemDefinitions = new ArrayList<>();
     private String param;
     private ModemDefinition selectedModemDefinition;
+    @ManagedProperty(value = "#{modemManageService}")
+    private ModemManageService modemManageService;
 
     public void setModemDefinitionService(ModemDefinitionService modemDefinitionService) {
         this.modemDefinitionService = modemDefinitionService;
@@ -99,4 +104,36 @@ public class ModemViewController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
+    
+     public void doConnect() {
+        try {
+            if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STOPPED)) {
+                dataModemDefinitions = this.modemDefinitionService.getAllData();
+                for (ModemDefinition dataModemDefinition : dataModemDefinitions) {
+                    if (Service.getInstance().getGateway(dataModemDefinition.getModemId()) == null) {
+                        SerialGateWay gateWay = new SerialGateWay();
+                        gateWay.setBaudRate(dataModemDefinition.getBaudRate());
+                        gateWay.setComPort(dataModemDefinition.getComId());
+                        gateWay.setInBound(true);
+                        gateWay.setManaufactur(dataModemDefinition.getManufacture());
+                        gateWay.setModelName(dataModemDefinition.getModel());
+                        gateWay.setModemId(dataModemDefinition.getModemId());
+                        gateWay.setOutBound(true);
+                        gateWay.setPinNumber(String.valueOf(dataModemDefinition.getPinNumber()));
+                        gateWay.setSmscNumber(dataModemDefinition.getSmscNumber());
+                        modemManageService.startServiceAndAddGateway(gateWay);
+                    }
+                }
+                Service.getInstance().startService(false);
+            }
+        } catch (Exception ex) {
+            LOGGER.error(ex, ex);
+        }
+    }
+
+    public void setModemManageService(ModemManageService modemManageService) {
+        this.modemManageService = modemManageService;
+    }
+     
+     
 }
