@@ -6,13 +6,18 @@
 package com.inkubator.sms.gateway.web;
 
 import com.inkubator.common.util.DateFormatter;
+import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.sms.gateway.SMSGATEWAY;
+import com.inkubator.sms.gateway.entity.SmsGatewayUser;
+import com.inkubator.sms.gateway.service.UserService;
 import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
+import com.inkubator.webcore.util.MessagesResourceUtil;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -21,6 +26,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import org.primefaces.context.RequestContext;
+import org.springframework.security.core.userdetails.User;
 
 /**
  *
@@ -32,9 +39,12 @@ public class LoginController extends BaseController {
 
     private String userId;
     private String password;
+    private String emailAddress;
     private String selectedLanguage;
     @ManagedProperty(value = "#{dateFormatter}")
     private DateFormatter dateFormatter;
+    @ManagedProperty(value = "#{userService}")
+    private UserService userService;
 
 //    public String doLogin() {
 //        System.out.println(" hahahahah");
@@ -47,6 +57,27 @@ public class LoginController extends BaseController {
         FacesUtil.setSessionAttribute(SMSGATEWAY.BAHASA_ACTIVE, selectedLanguage);
         FacesUtil.getFacesContext().getViewRoot().setLocale(new Locale(selectedLanguage));
         System.out.println(" Hehrherhehreh");
+    }
+
+    public void doResetPassword() {
+        RequestContext context = FacesUtil.getRequestContext();
+        Boolean emailIsExist = Boolean.FALSE;
+        try {
+            SmsGatewayUser smsGatewayUser = userService.getByEmailAddressInNotLock(emailAddress);
+            if (smsGatewayUser == null) {
+                MessagesResourceUtil.setMessages(FacesMessage.SEVERITY_INFO, "global.error", "error.email_not_registered",
+                        FacesUtil.getSessionAttribute(SMSGATEWAY.BAHASA_ACTIVE).toString());
+            } else {
+                emailIsExist = Boolean.TRUE;
+                smsGatewayUser.setPassword("Inkuba" + RandomNumberUtil.getRandomNumber(7));
+                userService.resetPassword(smsGatewayUser);
+
+            }
+
+        } catch (Exception ex) {
+            LOGGER.error("Error", ex);
+        }
+        context.addCallbackParam("emailIsExist", emailIsExist);
     }
 
     public String doLogin() {
@@ -84,6 +115,22 @@ public class LoginController extends BaseController {
 
     public void setDateFormatter(DateFormatter dateFormatter) {
         this.dateFormatter = dateFormatter;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public UserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
 }

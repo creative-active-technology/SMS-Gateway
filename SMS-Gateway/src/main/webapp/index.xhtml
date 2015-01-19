@@ -5,12 +5,14 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:pe="http://primefaces.org/ui/extensions">
     <h:head>
         <title>Facelet Title</title>
         <link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_fomr.css" type="text/css" media="screen" />
     </h:head>
     <h:body>
+        <p:growl id="growlReset" life="6000" showDetail="true" escape="false" showSummary="true" globalOnly="false"/>
         <h:form  prependId="false">
             <div >
                 <!--<p:cache region="loginForm" >-->
@@ -41,7 +43,7 @@
                                                      update="loginForm" 
                                                      style="width: 85px" />
                                     <p:commandLink id="resetPasswordId" value="#{appmsg['loginform.lupa_password']}" styleClass="isitext_hrm"
-                                                   style="margin-left: 10px;text-decoration: none" oncomplete="dialogReset.show();"/>
+                                                   style="margin-left: 10px;text-decoration: none" oncomplete="PF('dialogReset').show();"/>
                                 </h:panelGroup>
                                 <p:defaultCommand target="loginId" />
                             </h:panelGrid>
@@ -92,7 +94,46 @@
                     <!--<p:keyboard  layoutTemplate="#kk ddd gddg" layout="custom"/>-->
                 <!--</p:cache>-->
             </div>
+                        
         </h:form>
+        
+        <p:dialog id="dialogResetId" widgetVar="dialogReset" modal="true" width="450" height="155" header="#{appmsg['loginform.form_reset_password']}"
+                  draggable="false" hideEffect="puff" showEffect="clip" appendTo="@(body)"
+                  dynamic="true" resizable="false">
+
+            <h:form id="resetForm">
+                <div align="justify">
+                    <h:outputLabel value="#{appmsg['loginform.reset_dialog_info']}"/>
+                </div>
+                <h:panelGrid columns="3" style="margin-top: 20px;margin-bottom: 15px">
+                    <h:outputLabel for="emailId" value="Email" style="font-weight: bold;font-family: Trebuchet MS;color: #003366" escape="false"/>
+                    <p:outputLabel value=":" style="font-weight: bold;color: #003366" escape="false"/>
+                    <p:inputText  id="emailId" value="#{loginController.emailAddress}"  title="#{loginController.emailAddress}" required="true" requiredMessage="#{appmsg['loginform.email_address_mandatory']}" 
+                                  label="#{appmsg['loginform.email_address']}" style="width: 310px">
+                        <f:validateLength maximum="100"/>
+                    </p:inputText>
+                    <p:focus for="emailId"/>
+                </h:panelGrid>
+                <p:separator/>
+                <div align="right">
+                    <p:commandButton id="btnResetId" icon="ui-icon-mail-closed" value="Submit" styleClass="label_button"
+                                     action="#{loginController.doResetPassword()}" 
+                                     update=":growlReset,emailId" ajax="true" oncomplete="handleUpdateRequest(args)"
+                                     style="margin-top: 5px;margin-right: 10px;width: 80px" />
+                </div> 
+                <pe:tooltip for="btnResetId" value="#{appmsg['loginform.click_to_reset_password']}" showEffect="slideToggle"  
+                            hideEffect="slideToggle" showDelay="1"  myPosition="right center" atPosition="left center"/>
+            </h:form>
+        </p:dialog>
     </h:body>
+        <script type="text/javascript">
+        function handleUpdateRequest(args) {
+            if (args.validationFailed || !args.emailIsExist) {
+                jQuery('#dialogResetId').effect("shake", {times: 3}, 75);
+            } else {
+                PF('dialogReset').hide();
+            }
+        }
+    </script>
 </html>
 

@@ -28,19 +28,19 @@ public class UserRole  implements java.io.Serializable {
 
      private UserRoleId id;
      private Role role;
-     private User user;
+     private SmsGatewayUser user;
      private String description;
 
     public UserRole() {
     }
 
 	
-    public UserRole(UserRoleId id, Role role, User user) {
+    public UserRole(UserRoleId id, Role role, SmsGatewayUser user) {
         this.id = id;
         this.role = role;
         this.user = user;
     }
-    public UserRole(UserRoleId id, Role role, User user, String description) {
+    public UserRole(UserRoleId id, Role role, SmsGatewayUser user, String description) {
        this.id = id;
        this.role = role;
        this.user = user;
@@ -73,11 +73,11 @@ public class UserRole  implements java.io.Serializable {
 
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false, insertable=false, updatable=false)
-    public User getUser() {
+    public SmsGatewayUser getUser() {
         return this.user;
     }
     
-    public void setUser(User user) {
+    public void setUser(SmsGatewayUser user) {
         this.user = user;
     }
 

@@ -40,8 +40,9 @@ public class RoleServiceImpl extends IServiceImpl implements RoleService{
     }
 
     @Override
+     @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 30)
     public Role getEntiyByPK(Long l) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roleDao.getEntiyByPK(l);
     }
 
     @Override

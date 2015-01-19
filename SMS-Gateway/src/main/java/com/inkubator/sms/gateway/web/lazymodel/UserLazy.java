@@ -5,7 +5,7 @@
  */
 package com.inkubator.sms.gateway.web.lazymodel;
 
-import com.inkubator.sms.gateway.entity.User;
+import com.inkubator.sms.gateway.entity.SmsGatewayUser;
 import com.inkubator.sms.gateway.service.UserService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import org.primefaces.model.SortOrder;
  *
  * @author deni
  */
-public class UserLazy extends LazyDataModel<User> implements Serializable {
+public class UserLazy extends LazyDataModel<SmsGatewayUser> implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(UserLazy.class);
     private final String parameter;
     private final UserService loginHistoryService;
-    private List<User> listUser = new ArrayList<>();
+    private List<SmsGatewayUser> listUser = new ArrayList<>();
     private int total;
 
     public UserLazy(String parameter, UserService loginHistoryService) {
@@ -34,7 +34,7 @@ public class UserLazy extends LazyDataModel<User> implements Serializable {
     }
 
     @Override
-    public List<User> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<SmsGatewayUser> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         try {
             Order order = null;
             if(sortField != null){
@@ -53,13 +53,13 @@ public class UserLazy extends LazyDataModel<User> implements Serializable {
     }
 
     @Override
-    public Object getRowKey(User user) {
+    public Object getRowKey(SmsGatewayUser user) {
         return user.getId();
     }
 
     @Override
-    public User getRowData(String id) {
-        for (User user : listUser) {
+    public SmsGatewayUser getRowData(String id) {
+        for (SmsGatewayUser user : listUser) {
             if (id.equals(String.valueOf(user.getId()))) {
                 return user;
             }

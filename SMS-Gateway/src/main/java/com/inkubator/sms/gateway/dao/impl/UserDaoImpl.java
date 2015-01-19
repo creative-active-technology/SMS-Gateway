@@ -7,12 +7,15 @@ package com.inkubator.sms.gateway.dao.impl;
 
 import com.inkubator.datacore.dao.impl.IDAOImpl;
 import com.inkubator.sms.gateway.dao.UserDao;
-import com.inkubator.sms.gateway.entity.User;
+import com.inkubator.sms.gateway.entity.SmsGatewayUser;
 import java.util.List;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -27,16 +30,17 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(value = "userDao")
 @Lazy
-public class UserDaoImpl extends IDAOImpl<User> implements UserDao{
+public class UserDaoImpl extends IDAOImpl<SmsGatewayUser> implements UserDao {
+
     private static final long serialVersionUID = -3838059330383642763L;
 
     @Override
-    public Class<User> getEntityClass() {
-        return User.class;
+    public Class<SmsGatewayUser> getEntityClass() {
+        return SmsGatewayUser.class;
     }
 
     @Override
-    public List<User> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) {
+    public List<SmsGatewayUser> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) {
         FullTextSession fullTextSession = Search.getFullTextSession(getCurrentSession());
         org.apache.lucene.search.Sort sort;
         if (order.isAscending()) {
@@ -57,7 +61,7 @@ public class UserDaoImpl extends IDAOImpl<User> implements UserDao{
         FullTextSession fullTextSession = Search.getFullTextSession(getCurrentSession());
         return doSearchFullText(parameter, fullTextSession).getResultSize();
     }
-    
+
     private FullTextQuery doSearchFullText(String parameter, FullTextSession fullTextSession) {
         SearchFactory searchFactory = fullTextSession.getSearchFactory();
         QueryBuilder mythQB = searchFactory.buildQueryBuilder().forEntity(getEntityClass()).get();
@@ -72,5 +76,29 @@ public class UserDaoImpl extends IDAOImpl<User> implements UserDao{
         }
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(luceneQuery, getEntityClass());
         return fullTextQuery;
+    }
+
+    @Override
+    public void saveAndMerge(SmsGatewayUser user) {
+        getCurrentSession().update(user);
+        getCurrentSession().flush();
+    }
+
+    @Override
+    public SmsGatewayUser getByUserIdOrEmail(String param) {
+        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
+        Disjunction disjunction = Restrictions.disjunction();
+        disjunction.add(Restrictions.eq("userId", param));
+        disjunction.add(Restrictions.eq("emailAddress", param));
+        criteria.add(disjunction);
+        return (SmsGatewayUser) criteria.uniqueResult();
+    }
+
+    @Override
+    public SmsGatewayUser getByEmailAddressInNotLock(String emailAddress) {
+        Criteria criteria = getCurrentSession().createCriteria(getEntityClass());
+        criteria.add(Restrictions.eq("emailAddress", emailAddress));
+        criteria.add(Restrictions.eq("isLock", 0));
+        return (SmsGatewayUser) criteria.uniqueResult();
     }
 }

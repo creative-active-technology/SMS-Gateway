@@ -6,7 +6,7 @@
 package com.inkubator.sms.gateway.dao;
 
 import com.inkubator.datacore.dao.IDAO;
-import com.inkubator.sms.gateway.entity.User;
+import com.inkubator.sms.gateway.entity.SmsGatewayUser;
 import java.util.List;
 import org.hibernate.criterion.Order;
 
@@ -14,8 +14,14 @@ import org.hibernate.criterion.Order;
  *
  * @author deni
  */
-public interface UserDao extends IDAO<User>{
-    public List<User> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) ;
+public interface UserDao extends IDAO<SmsGatewayUser>{
+    public List<SmsGatewayUser> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order);
 
     public Integer getTotalByFullTextService(String parameter) ;
+    
+    public void saveAndMerge(SmsGatewayUser user);
+    
+    public SmsGatewayUser getByUserIdOrEmail(String param);
+    
+    public SmsGatewayUser getByEmailAddressInNotLock(String emailAddress);
 }

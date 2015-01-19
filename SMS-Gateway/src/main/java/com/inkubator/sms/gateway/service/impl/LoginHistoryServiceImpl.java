@@ -201,5 +201,11 @@ public class LoginHistoryServiceImpl extends IServiceImpl implements LoginHistor
     public Integer getTotalByFullTextService(String parameter) throws Exception {
         return loginHistoryDao.getTotalByFullTextService(parameter);
     }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
+    public void updateAndPushMessage(LoginHistory entity) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
