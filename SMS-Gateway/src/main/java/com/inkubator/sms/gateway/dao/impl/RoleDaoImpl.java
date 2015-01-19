@@ -49,7 +49,7 @@ public class RoleDaoImpl extends IDAOImpl<Role> implements RoleDao{
         fullTextQuery1.setFirstResult(minResult);
         fullTextQuery1.setMaxResults(maxResult);
         fullTextQuery1.setSort(sort);
-        fullTextQuery1.setSort(sort);
+//        fullTextQuery1.setSort(sort);
         return fullTextQuery1.list();
     }
 

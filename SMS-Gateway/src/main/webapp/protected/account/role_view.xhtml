@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <head>
+        <title>Facelet Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <ui:composition template="/templates/master_layout_full.xhtml"> 
+            <ui:define name="windowTitle">
+                Home
+            </ui:define>
+            <ui:define name="center">
+                <div class="ui-grid-col-10" id="header_isi">
+                    <p:growl id="modemFormId" showDetail="true" showSummary="true" globalOnly="true" />
+                    <h:form id="modemViewFormId">
+                        <div style="margin: 10px">
+                            <p:outputLabel value="Role"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <p:outputLabel value="Role from Account"  style="font-size: 11px;margin-left: 5px" />
+                        </div>
+                        <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
+                            <p:menuitem value="#{appmsg['modem.modem_list']}"  url="/protected/home.htm" />
+                            <p:menuitem value="User"  url="/protected/account/role_view.htm" />
+                        </p:breadCrumb>
+                        <p:focus for="pecarianTxtid" />
+                        <div style="margin-top: 10px;clear: both" />
+                        <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: left">
+                            <p:outputLabel value="#{appmsg['modem.search']}" style="font-weight: bold"/>
+                            <p:outputLabel value=":" style="font-weight: bold"/>
+                            <p:inputText  placeholder="Full Text Service"  style="width: 260px"  id="pecarianTxtid" value="#{userViewController.parameter}" type="search"/>
+                            <p:commandButton value="Cari"  icon="ui-icon-search" action="#{userViewController.doSearch()}" update="tableModemId"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
+                            <p:commandButton value="#{appmsg['global.add']}"  icon="ui-icon-plus" action="#{userViewController.doAdd()}"/>
+                        </h:panelGrid>
+                        
+                        <div style="clear: both" />
+                        <p:dataTable value="#{roleViewController.lazyDataModel}" var="data" lazy="true" paginator="true" pageLinks="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {PageLinks} {NextPageLink} {LastPageLink}"
+                                     rows="5" rowsPerPageTemplate="5,7,11,15,21,25,31" style="margin: 10px" id="tableModemId" 
+                                     rowIndexVar="no">
+                            <p:column style="text-align: center;width: 3%;">
+                                <f:facet name="header">  
+                                    <h:outputText value="No."  />
+                                </f:facet>
+                                <h:outputLabel value="#{no+1}." />
+                            </p:column>
+                            <p:column sortBy="roleName" >
+                                <f:facet name="header">  
+                                    <h:outputText value="Username"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{data.roleName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Created By"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{data.createdBy}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Created On"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{data.createdOn}"/>
+                            </p:column><!--
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Updated By"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{data.updatedBy}"/>
+                            </p:column>
+-->                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Description"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{data.description}"/>
+                            </p:column>
+                            <f:facet name="footer">
+                                <p:outputLabel value="#{appmsg['global.total_data']} : "/>
+                                <p:outputLabel value="#{roleViewController.lazyDataModel.rowCount}"/>
+                                <p:outputLabel value="Data" style="margin-left: 3px"/>
+                            </f:facet> 
+                        </p:dataTable>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

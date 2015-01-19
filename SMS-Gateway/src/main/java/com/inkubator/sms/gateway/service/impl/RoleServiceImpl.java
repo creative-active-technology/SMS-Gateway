@@ -189,4 +189,17 @@ public class RoleServiceImpl extends IServiceImpl implements RoleService{
     public List<Role> getAllDataPageAbleIsActive(int i, int i1, Order order, Byte b) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<Role> getAllByTextFullService(String parameter, int minResult, int maxResult, Order order) {
+//        System.out.println("muahahahah");
+        return roleDao.getAllByFullTextService(parameter, minResult, maxResult, order);
+    }
+
+    @Override
+    @Transactional(readOnly = false, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public Integer getTotalByFullTextService(String parameter) {
+        return roleDao.getTotalByFullTextService(parameter);
+    }
 }

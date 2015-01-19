@@ -7,6 +7,8 @@ package com.inkubator.sms.gateway.service;
 
 import com.inkubator.datacore.service.IService;
 import com.inkubator.sms.gateway.entity.Role;
+import java.util.List;
+import org.hibernate.criterion.Order;
 
 /**
  *
@@ -14,5 +16,8 @@ import com.inkubator.sms.gateway.entity.Role;
  */
 public interface RoleService extends IService<Role> { 
     
+    public List<Role> getAllByTextFullService(String parameter, int minResult, int maxResult, Order order);
+    
+    public Integer getTotalByFullTextService(String parameter);
     
 }
