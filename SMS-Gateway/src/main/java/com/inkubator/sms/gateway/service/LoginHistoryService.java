@@ -14,8 +14,11 @@ import org.hibernate.criterion.Order;
  *
  * @author Deni Husni FR
  */
-public interface LoginHistoryService extends IService<LoginHistory>{
-        public List<LoginHistory> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order)  throws Exception;
+public interface LoginHistoryService extends IService<LoginHistory> {
 
-    public Integer getTotalByFullTextService(String parameter)  throws Exception;
+    public List<LoginHistory> getAllByFullTextService(String parameter, int minResult, int maxResult, Order order) throws Exception;
+
+    public Integer getTotalByFullTextService(String parameter) throws Exception;
+
+    public void updateAndPushMessage(LoginHistory entity) throws Exception;
 }

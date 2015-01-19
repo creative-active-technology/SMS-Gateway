@@ -25,10 +25,10 @@ public class RoleConverter implements Converter {
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        RoleService hrmRoleService = (RoleService) ServiceWebUtil.getService("roleService");
+        RoleService roleService = (RoleService) ServiceWebUtil.getService("roleService");
         Object object = null;
         try {
-            object = hrmRoleService.getEntiyByPK(Long.parseLong(value));
+            object = roleService.getEntiyByPK(Long.parseLong(value));
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
         }

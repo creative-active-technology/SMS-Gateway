@@ -5,14 +5,20 @@
  */
 package com.inkubator.sms.gateway.web;
 
-import com.inkubator.sms.gateway.entity.User;
+import com.inkubator.sms.gateway.SMSGATEWAY;
+import com.inkubator.sms.gateway.entity.SmsGatewayUser;
 import com.inkubator.sms.gateway.service.UserService;
 import com.inkubator.sms.gateway.web.lazymodel.UserLazy;
 import com.inkubator.webcore.controller.BaseController;
+import com.inkubator.webcore.util.FacesUtil;
+import com.inkubator.webcore.util.MessagesResourceUtil;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.model.LazyDataModel;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -24,9 +30,9 @@ public class UserViewController extends BaseController {
 
     @ManagedProperty(value = "#{userService}")
     private UserService userService;
-    private LazyDataModel<User> lazyDataModel;
+    private LazyDataModel<SmsGatewayUser> lazyDataModel;
     private String parameter;
-    private User selectedUser;
+    private SmsGatewayUser selectedUser;
 
     @Override
     public void initialization() {
@@ -41,6 +47,29 @@ public class UserViewController extends BaseController {
         return "/protected/account/user_form.htm?faces-redirect=true";
     }
 
+    public String doUpdate() {
+        return "/protected/account/user_form.htm?faces-redirect=true&execution=e" + selectedUser.getId();
+    }
+        
+    public String doDetail() {
+        return "/protected/account/user_detail.htm?faces-redirect=true&execution=e" + selectedUser.getId();
+    }
+    
+    public void doDelete() {
+        try {
+            this.userService.delete(selectedUser);
+            MessagesResourceUtil.setMessages(FacesMessage.SEVERITY_INFO, "global.delete", "global.delete_successfully",
+                    FacesUtil.getSessionAttribute(SMSGATEWAY.BAHASA_ACTIVE).toString());
+
+        } catch (ConstraintViolationException | DataIntegrityViolationException ex) {
+            MessagesResourceUtil.setMessages(FacesMessage.SEVERITY_ERROR, "global.error", "error.delete_constraint",
+                    FacesUtil.getSessionAttribute(SMSGATEWAY.BAHASA_ACTIVE).toString());
+            LOGGER.error("Error", ex);
+        } catch (Exception ex) {
+            LOGGER.error("Error", ex);
+        }
+    }
+    
     public UserService getUserService() {
         return userService;
     }
@@ -49,14 +78,14 @@ public class UserViewController extends BaseController {
         this.userService = userService;
     }
 
-    public LazyDataModel<User> getLazyDataModel() {
+    public LazyDataModel<SmsGatewayUser> getLazyDataModel() {
         if (lazyDataModel == null) {
             lazyDataModel = new UserLazy(parameter, userService);
         }
         return lazyDataModel;
     }
 
-    public void setLazyDataModel(LazyDataModel<User> lazyDataModel) {
+    public void setLazyDataModel(LazyDataModel<SmsGatewayUser> lazyDataModel) {
         this.lazyDataModel = lazyDataModel;
     }
 
@@ -68,11 +97,11 @@ public class UserViewController extends BaseController {
         this.parameter = parameter;
     }
 
-    public User getSelectedUser() {
+    public SmsGatewayUser getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(User selectedUser) {
+    public void setSelectedUser(SmsGatewayUser selectedUser) {
         this.selectedUser = selectedUser;
     }
 

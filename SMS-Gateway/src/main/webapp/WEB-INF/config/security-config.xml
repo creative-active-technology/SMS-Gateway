@@ -36,17 +36,17 @@
         <property name="filterProcessesUrl" value="/logout.htm"/>
     </bean>
     <security:authentication-manager>
-             <security:authentication-provider>
-            <!--<security:password-encoder hash="sha-256" />-->
+<!--             <security:authentication-provider>
+            <security:password-encoder hash="sha-256" />
             <security:user-service>
                 <security:user name="admin" password="admin1234" authorities="ROLE_ADMIN_HRM" />
                 <security:user name="rizky" password="admin1234" authorities="ROLE_ADMIN_HRM" />
                 <security:user name="deni.fahri" password="123456789" authorities="ADMINISTRATOR_ROLE" />
             </security:user-service>
-        </security:authentication-provider>
-<!--        <security:authentication-provider user-service-ref="userDetailsService" >
-            <security:password-encoder hash="sha-256" />
         </security:authentication-provider>-->
+        <security:authentication-provider user-service-ref="userDetailsService" >
+            <security:password-encoder hash="sha-256" />
+        </security:authentication-provider>
     </security:authentication-manager>
     <security:global-method-security jsr250-annotations="enabled" pre-post-annotations="enabled" />
         

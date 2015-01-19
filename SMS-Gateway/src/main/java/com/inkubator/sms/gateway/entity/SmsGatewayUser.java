@@ -5,9 +5,12 @@
  */
 package com.inkubator.sms.gateway.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import org.hibernate.search.annotations.Analyze;
@@ -35,7 +39,7 @@ import org.hibernate.search.annotations.Store;
     @UniqueConstraint(columnNames = "user_id"),
     @UniqueConstraint(columnNames = "email_address")}
 )
-public class User implements java.io.Serializable {
+public class SmsGatewayUser implements java.io.Serializable {
 
     private long id;
     private Integer version;
@@ -52,15 +56,16 @@ public class User implements java.io.Serializable {
     private String updatedBy;
     private Date updatedOn;
     private Set<UserRole> userRoles = new HashSet<UserRole>(0);
+    private List<Role> roles = new ArrayList<>(0);
 
-    public User() {
+    public SmsGatewayUser() {
     }
 
-    public User(long id) {
+    public SmsGatewayUser(long id) {
         this.id = id;
     }
 
-    public User(long id, String userId, String realName, String emailAddress, String phoneNumber, String password, Integer isActive, Integer isLock, Integer isExpired, String createdBy, Date createdOn, String updatedBy, Date updatedOn, Set<UserRole> userRoles) {
+    public SmsGatewayUser(long id, String userId, String realName, String emailAddress, String phoneNumber, String password, Integer isActive, Integer isLock, Integer isExpired, String createdBy, Date createdOn, String updatedBy, Date updatedOn, Set<UserRole> userRoles) {
         this.id = id;
         this.userId = userId;
         this.realName = realName;
@@ -212,7 +217,7 @@ public class User implements java.io.Serializable {
         this.updatedOn = updatedOn;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     public Set<UserRole> getUserRoles() {
         return this.userRoles;
     }
@@ -221,4 +226,51 @@ public class User implements java.io.Serializable {
         this.userRoles = userRoles;
     }
 
+    @Transient
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+        @Transient
+    public String getAcitveAsString() {
+        String data = null;
+        if (isActive == 1) {
+            data = "Yes";
+        }
+
+        if (isActive == 0) {
+            data = "No";
+        }
+        return data;
+    }
+
+    @Transient
+    public String getLockAsString() {
+        String data = null;
+        if (isLock == 1) {
+            data = "Yes";
+        }
+
+        if (isLock == 0) {
+            data = "No";
+        }
+        return data;
+    }
+
+    @Transient
+    public String getExpiredAsString() {
+        String data = null;
+        if (isExpired == 1) {
+            data = "Yes";
+        }
+
+        if (isExpired == 0) {
+            data = "No";
+        }
+        return data;
+    }
 }

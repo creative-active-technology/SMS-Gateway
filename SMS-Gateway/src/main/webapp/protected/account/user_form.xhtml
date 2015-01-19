@@ -20,8 +20,8 @@
                     <p:growl globalOnly="true" id="growlModemConfig" showSummary="true" showDetail="true"/>
                     <h:form id="smsSchedulerId">
                         <div style="margin: 10px">
-                            <p:outputLabel value="#{appmsg['sms.sms_schedule']}"  style="font-size: 24px;font-family: Verdana;color: #003333" />
-                            <p:outputLabel value="#{appmsg['sms.scheduled_sms_form']}"  style="font-size: 11px;margin-left: 5px" />
+                            <p:outputLabel value="User Form"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <p:outputLabel value="User Form from Account"  style="font-size: 11px;margin-left: 5px" />
                         </div>
                         <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
                             <p:menuitem value="Home"  url="/protected/home.htm" />
@@ -99,8 +99,6 @@
                                         </p:password>
                                         <p:message for="password"/>
                                     </p:column>
-
-
                                     <p:column style="width: 13%;background-color: #e1f0f0!important" >
                                         <p:outputLabel  value="#{appmsg['user_form.is_lock']}" styleClass="label_hrm" for="isLock"/>
                                     </p:column>
@@ -122,8 +120,6 @@
                                         </p:password>
                                         <p:message for="checkpassword"/>
                                     </p:column>
-
-
                                 </p:row>
                             </p:panelGrid>
                             <p:separator/>
@@ -144,38 +140,9 @@
                             </h:panelGrid>
                         </div>
                     </h:form>
-                    <p:dialog widgetVar="addDialogSMS" header="#{appmsg['sms.add_phone_no']}" modal="true" width="375" dynamic="true" 
-                              appendTo="@(body)" resizable="false"   closeOnEscape="true" >
-                        <h:form id="addId">
-                            <p:messages/>
-                            <h:panelGrid  columns="4">
-                                <p:outputLabel value="#{appmsg['sms.phone_no']}"/>
-                                <p:outputLabel value=":"  />
-                                <p:inputText  value="#{schedullerSendingSMSController.schedullerSmsModel.destination}" placeholder="#{appmsg['sms.sample_info_1']}"/>
-                                <p:commandButton value="#{appmsg['global.add']}" action="#{schedullerSendingSMSController.doAdd()}" id="yesId" title="Ya" update=":smsSchedulerId:sendId,addId"
-                                                 style="margin-right: 5px" />
-                            </h:panelGrid>
-                            <p:focus for="addId" />
-                        </h:form>
-                    </p:dialog>
                 </div>
             </ui:define>
         </ui:composition>
-
-                                <p:dialog widgetVar="addDialogSMS" header="#{appmsg['sms.add_phone_no']}" modal="true" width="375" dynamic="true" 
-                                             appendTo="@(body)" resizable="false"   closeOnEscape="true" >
-            <h:form id="addId">
-                <p:messages/>
-                <h:panelGrid  columns="4">
-                    <p:outputLabel value="#{appmsg['sms.phone_no']}"/>
-                    <p:outputLabel value=":"  />
-                    <p:inputText  value="#{schedullerSendingSMSController.schedullerSmsModel.destination}" placeholder="#{appmsg['sms.sample_info_1']}"/>
-                    <p:commandButton value="#{appmsg['global.add']}" action="#{schedullerSendingSMSController.doAdd()}" id="yesId" title="Ya"
-                                     style="margin-right: 5px" />
-                </h:panelGrid>
-                <p:focus for="addId" />
-            </h:form>
-        </p:dialog>
     </h:body>
 </html>
 
