@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 import org.smslib.AGateway;
+import org.smslib.AGateway.Protocols;
 import org.smslib.GatewayException;
 import org.smslib.ICallNotification;
 import org.smslib.IGatewayStatusNotification;
@@ -28,17 +29,21 @@ import org.smslib.modem.SerialModemGateway;
  * @author Deni Husni FR
  */
 public class ModemManageService {
-    
+
     private static final Logger LOGGER = Logger.getLogger(ModemManageService.class);
-    
+
     public void startServiceAndAddGateway(SerialGateWay gateway) {
-        
+
         try {
             SerialModemGateway modemGateway = new SerialModemGateway(gateway.getModemId(), gateway.getComPort(), gateway.getBaudRate(), gateway.getManaufactur(), gateway.getModelName());
             modemGateway.setInbound(gateway.getInBound());
             modemGateway.setOutbound(gateway.getOutBound());
             modemGateway.setSimPin(gateway.getPinNumber());
             modemGateway.setSmscNumber(gateway.getSmscNumber());
+            modemGateway.setOutbound(true);
+            modemGateway.setInbound(true);
+            modemGateway.setProtocol(Protocols.PDU);
+            modemGateway.getATHandler().setStorageLocations("SMME");
             InboundNotification inboundNotification = new InboundNotification();
 // Create the notification callback method for inbound voice calls.
             CallNotification callNotification = new CallNotification();
@@ -53,21 +58,21 @@ public class ModemManageService {
         } catch (GatewayException ex) {
             LOGGER.error(ex, ex);
         }
-        
+
     }
-    
+
     public static class OutboundNotification implements IOutboundMessageNotification {
-        
+
         @Override
         public void process(org.smslib.AGateway gateway, OutboundMessage msg) {
             LOGGER.info("Outbound handler called from Gateway " + gateway.getGatewayId());
             LOGGER.info(msg);
         }
-        
+
     }
-    
+
     public class InboundNotification implements IInboundMessageNotification {
-        
+
         @Override
         public void process(AGateway gateway, Message.MessageTypes msgType, InboundMessage msg) {
             try {
@@ -77,46 +82,47 @@ public class ModemManageService {
                     LOGGER.info(">>> New Inbound message detected from Gateway: " + gateway.getGatewayId());
                 }
                 String message = msg.getText();
-                
+
                 StringTokenizer st = new StringTokenizer(message, "#");
                 System.out.println(message);
-                ApprovalModel approvalModel = new ApprovalModel();
-                approvalModel.setApproverNumberHp(msg.getOriginator());
-                Service.getInstance().deleteMessage(msg);//harus disini jika terjadi error parsing message tetap terdelere dan tidak menumpuk di kartu
-                approvalModel.setApproveCondition(st.nextToken());
-                approvalModel.setApprovalActivityNumber(st.nextToken());
-                approvalModel.setComentar(st.nextToken());
-                System.out.println(approvalModel);
-                
+                System.out.println(msg.getOriginator());
+//                ApprovalModel approvalModel = new ApprovalModel();
+//                approvalModel.setApproverNumberHp(msg.getOriginator());
+//                Service.getInstance().deleteMessage(msg);//harus disini jika terjadi error parsing message tetap terdelere dan tidak menumpuk di kartu
+//                approvalModel.setApproveCondition(st.nextToken());
+//                approvalModel.setApprovalActivityNumber(st.nextToken());
+//                approvalModel.setComentar(st.nextToken());
+//                System.out.println(approvalModel);
+
             } catch (Exception ex) {
-                LOGGER.error("ini errornya "+ex.getClass());
+                LOGGER.error("ini errornya " + ex.getClass());
                 if (ex.getClass().isInstance(NoSuchElementException.class)) {
-                       LOGGER.info("sdjfhdsjhfdsjhfdsjhf");
+                    LOGGER.info("sdjfhdsjhfdsjhfdsjhf");
                 }
                 LOGGER.error(ex, ex);
             }
-            
+
         }
     }
-    
+
     public class CallNotification implements ICallNotification {
-        
+
         @Override
         public void process(AGateway gateway, String callerId) {
             System.out.println(">>> New call detected from Gateway: " + gateway.getGatewayId() + " : " + callerId);
         }
     }
-    
+
     public class GatewayStatusNotification implements IGatewayStatusNotification {
-        
+
         @Override
         public void process(AGateway gateway, AGateway.GatewayStatuses oldStatus, AGateway.GatewayStatuses newStatus) {
             System.out.println(">>> Gateway Status change for " + gateway.getGatewayId() + ", OLD: " + oldStatus + " -> NEW: " + newStatus);
         }
     }
-    
+
     public class OrphanedMessageNotification implements IOrphanedMessageNotification {
-        
+
         @Override
         public boolean process(AGateway gateway, InboundMessage msg) {
             System.out.println(">>> Orphaned message part detected from " + gateway.getGatewayId());
