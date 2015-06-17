@@ -10,13 +10,21 @@ import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.service.ModemDefinitionService;
 import com.inkubator.sms.gateway.service.impl.ModemManageService;
 import com.inkubator.webcore.controller.BaseController;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.smslib.AGateway;
+import org.smslib.GatewayException;
+import org.smslib.SMSLibException;
 import org.smslib.Service;
+import org.smslib.TimeoutException;
+import org.smslib.USSDRequest;
 
 /**
  *
@@ -104,8 +112,8 @@ public class ModemViewController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
-    
-     public void doConnect() {
+
+    public void doConnect() {
         try {
             if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STOPPED)) {
                 dataModemDefinitions = this.modemDefinitionService.getAllData();
@@ -121,6 +129,7 @@ public class ModemViewController extends BaseController {
                         gateWay.setOutBound(true);
                         gateWay.setPinNumber(String.valueOf(dataModemDefinition.getPinNumber()));
                         gateWay.setSmscNumber(dataModemDefinition.getSmscNumber());
+
                         modemManageService.startServiceAndAddGateway(gateWay);
                     }
                 }
@@ -134,6 +143,34 @@ public class ModemViewController extends BaseController {
     public void setModemManageService(ModemManageService modemManageService) {
         this.modemManageService = modemManageService;
     }
-     
-     
+
+    public void doOffService() {
+
+        try {
+            dataModemDefinitions = this.modemDefinitionService.getAllData();
+            for (ModemDefinition dataModemDefinition : dataModemDefinitions) {
+                Service.getInstance().getGateway(dataModemDefinition.getModemId()).stopGateway();
+                Service.getInstance().stopService();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ModemViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void doCheckBalance() {
+        USSDRequest request = new USSDRequest("AT+CUSD=1,\"*888#\",15\r");
+        System.out.println(" Ini perintahnya USSD nya" + request.getContent());
+        for (ModemDefinition dataModemDefinition : dataModemDefinitions) {
+            try {
+                AGateway aGateway = Service.getInstance().findGateway(dataModemDefinition.getModemId());
+                aGateway.sendUSSDCommand("*888#");
+                System.out.println(" ini berhasisisisillll");
+//                 Service.getInstance().sendUSSDRequest(request, dataModemDefinition.getModemId());
+            } catch (GatewayException | TimeoutException | IOException | InterruptedException ex) {
+                Logger.getLogger(ModemViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
 }

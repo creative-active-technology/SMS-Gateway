@@ -12,47 +12,27 @@ import java.io.Serializable;
  * @author Deni Husni FR
  */
 public class ApprovalModel implements Serializable{
-    private String approverNumberHp;
-    private String approvalActivityNumber;
-    private String approveCondition;
-    private String comentar;
+    private String senderNumber;
+    private String smsContent;
 
-    public String getApproverNumberHp() {
-        return approverNumberHp;
+    public String getSenderNumber() {
+        return senderNumber;
     }
 
-    public void setApproverNumberHp(String approverNumberHp) {
-        this.approverNumberHp = approverNumberHp;
+    public void setSenderNumber(String senderNumber) {
+        this.senderNumber = senderNumber;
     }
 
-    public String getApprovalActivityNumber() {
-        return approvalActivityNumber;
+    public String getSmsContent() {
+        return smsContent;
     }
 
-    public void setApprovalActivityNumber(String approvalActivityNumber) {
-        this.approvalActivityNumber = approvalActivityNumber;
+    public void setSmsContent(String smsContent) {
+        this.smsContent = smsContent;
     }
-
-    public String getApproveCondition() {
-        return approveCondition;
-    }
-
-    public void setApproveCondition(String approveCondition) {
-        this.approveCondition = approveCondition;
-    }
-
-    public String getComentar() {
-        return comentar;
-    }
-
-    public void setComentar(String comentar) {
-        this.comentar = comentar;
-    }
-
-    @Override
-    public String toString() {
-        return "ApprovalModel{" + "approverNumberHp=" + approverNumberHp + ", approvalActivityNumber=" + approvalActivityNumber + ", approveCondition=" + approveCondition + ", comentar=" + comentar + '}';
-    }
+    
+    
+   
     
     
 }

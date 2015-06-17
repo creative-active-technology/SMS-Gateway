@@ -16,16 +16,16 @@
         <h:form  prependId="false">
             <div >
                 <!--<p:cache region="loginForm" >-->
-                    <p:panel header="Login Form" style="width: 480px;height: 270px;font-size: 12px;top: 50%!important;position: fixed;left: 50%; margin-left: -240px;margin-top: -130px">
+                    <p:panel header="Login Form" style="width: 550px;height: 300px;font-size: 12px;top: 50%!important;position: fixed;left: 50%; margin-left: -250px;margin-top: -130px">
                         <h:panelGrid columns="2" style="margin-bottom: 10px">
                             <p:graphicImage value="./resources/images/sms_gate_way.png" height="136px" width="136px" style="margin-right: 10px;margin-top: 10px"  cache="true"/>
-                            <h:panelGrid columns="3" cellpadding="3" style="margin-left: 0px">
+                            <h:panelGrid columns="3" cellpadding="3" style="margin-left: 10px">
                                 <h:outputLabel for="j_username" value="#{appmsg['loginform.userid']}" styleClass="label_hrm" escape="false"/>
                                 <p:outputLabel value=":" styleClass="label_hrm" escape="false"/>
                                 <p:focus for="j_username">
                                     <p:inputText  requiredMessage="#{appmsg['loginform.userid_mandatory']}" value="#{loginController.userId}"  maxlength="45"  placeholder="#{appmsg['loginform.please_enter_your_user_id']}"
                                                   id="j_username" required="true" label="#{appmsg['loginform.userid']}" validatorMessage="#{appmsg['loginform.username_validator']}"  
-                                                  style="width: 200px;font-size: 14px!important;font-family: Calibri !important">
+                                                  style="width: 250px;font-size: 14px!important;font-family: Calibri !important">
 
                                     </p:inputText>
                                 </p:focus>
@@ -33,7 +33,7 @@
                                 <p:outputLabel value=":" styleClass="label_hrm" escape="false"  />
                                 <p:password id="j_password"  validatorMessage="#{appmsg['loginform.password_validator']}" value="#{loginController.password}"
                                             requiredMessage="#{appmsg['loginform.password_mandatory']}" placeholder="#{appmsg['loginform.please_enter_your_password']}"
-                                            required="true" style="width: 200px">
+                                            required="true" style="width: 250px">
                                 </p:password>
                                 <p:outputLabel/>
                                 <p:outputLabel/>
@@ -48,7 +48,7 @@
                                 <p:defaultCommand target="loginId" />
                             </h:panelGrid>
                         </h:panelGrid>
-                        <div style="margin-left: 40px;margin-right: 20px">
+                        <div style="margin-left: 50px;margin-right: 20px;margin-top: 18px">
                             <c:if test="${not empty param.login_error or not empty param.session_expired}">
                                 <c:if test="${not empty param.login_error}">
                                     <p:outputLabel value="#{appmsg['loginform.failed']}"
@@ -79,7 +79,7 @@
                         </div>
                         <!--<p:outputLabel value="Silahkan login dengan menggunakan User ID dan Password Anda"  style="float: right"/>-->
                         <div style="clear: both"/>
-                        <p:separator style="margin-top: 5px"/>
+                        <p:separator style="margin-top: 20px"/>
                         <div style="float: left;margin-top: -5px" >
                             <h:outputLabel value="Inkuba SMS Gateway" style="font-size: 10px!important"/>   
                         </div>

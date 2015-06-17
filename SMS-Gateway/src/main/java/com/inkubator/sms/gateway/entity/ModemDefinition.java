@@ -240,7 +240,13 @@ public class ModemDefinition implements java.io.Serializable {
 
     @Transient
     public Boolean getIsConnected() {
-        return Service.getInstance().getGateway(modemId) != null;
+        if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STARTED)) {
+            return true;
+        }
+        if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STOPPED)) {
+            return false;
+        }
+        return null;
     }
 
     @Column(name = "phone_number", length = 45)

@@ -37,8 +37,8 @@
                         </h:panelGrid>
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
                             <p:commandButton value="#{appmsg['global.add']}"  icon="ui-icon-plus" action="#{modemViewController.doAdd()}"/>
-                            <p:commandButton value="#{appmsg['modem.activate_modem']}"  icon="ui-icon-signal-diag"  title="#{appmsg['modem.activate_all_modem']}"/>
-                            <p:commandButton value="#{appmsg['modem.turn_off_service']}"  icon="ui-icon-signal"  title="#{appmsg['modem.turn_off_all_sevice']}"/>
+                            <p:commandButton value="#{appmsg['modem.activate_modem']}"  icon="ui-icon-signal-diag"  title="#{appmsg['modem.activate_all_modem']}" action="#{modemViewController.doConnect()}" update="tableModemId"/>
+                            <p:commandButton value="#{appmsg['modem.turn_off_service']}"  icon="ui-icon-signal"  title="#{appmsg['modem.turn_off_all_sevice']}" action="#{modemViewController.doOffService()}" update="tableModemId" />
                         </h:panelGrid>
                         <div style="clear: both" />
                         <p:dataTable value="#{modemViewController.dataModemDefinitions}" var="modem"  rowIndexVar="no" style="margin-left: 10px; margin-right: 10px;margin-top: 5px" id="tableModemId">
@@ -54,7 +54,7 @@
                                 </f:facet>
                                 <h:outputLabel value= "#{modem.modemId}"/>
                             </p:column>
-                            <p:column  style="text-align: center;width: 150px" >
+                            <p:column  style="text-align: center;width: 170px" >
                                 <f:facet name="header">  
                                     <h:outputText value="#{appmsg['global.action']}"/>
                                 </f:facet>
@@ -70,11 +70,11 @@
                                     <f:setPropertyActionListener value="#{modem}" target="#{modemViewController.selectedModemDefinition}" />
                                 </p:commandButton>
                                 -
-                                <p:commandButton icon="ui-icon-power" style="font-size: 10px" ajax="true" title="Disconent Modem" action="#{modemViewController.doConnect()}" >
+                                <p:commandButton icon="ui-icon-power" style="font-size: 10px" ajax="true" title="Disconent Modem" action="#{modemViewController.doCheckBalance()}">
                                     <f:setPropertyActionListener value="#{modem}" target="#{modemViewController.selectedModemDefinition}" />
                                 </p:commandButton>
                             </p:column>
-                            <p:column  >
+                            <p:column  style="width: 150px">
                                 <f:facet name="header">  
                                     <h:outputText value="#{appmsg['modem.manufacture']}"/>
                                 </f:facet>
@@ -106,14 +106,14 @@
                                     <p:outputLabel value= "#{modem.pricePerSms}"/>
                                 </div>
                             </p:column>
-                            <p:column sortBy="currentValue" >
+<!--                            <p:column sortBy="currentValue" >
                                 <f:facet name="header">  
                                     <h:outputText value="#{appmsg['modem.total_balance']}"/>
                                 </f:facet>
                                 <div align="right">
                                     <p:outputLabel value= "#{modem.currentValue}"/>
                                 </div>
-                            </p:column>
+                            </p:column>-->
                             <p:column sortBy="pinNumber"  style="text-align: center">
                                 <f:facet name="header">  
                                     <h:outputText value="#{appmsg['modem.connected']}"/>
