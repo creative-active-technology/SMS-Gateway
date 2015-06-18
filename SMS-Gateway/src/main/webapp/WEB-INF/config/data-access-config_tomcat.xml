@@ -47,8 +47,8 @@
         <property name="acquireIncrement" value="5"/>
         <property name="acquireRetryAttempts" value="3"/>
         <property name="acquireRetryDelay" value="4500"/>
-        <property name="maxPoolSize" value="100"/>
-        <property name="minPoolSize" value="20"/>
+        <property name="maxPoolSize" value="20"/>
+        <property name="minPoolSize" value="10"/>
         <property name="maxStatements" value="50"/>
         <property name="maxIdleTime" value="1000" />
         <property name="autoCommitOnClose" value="false" />
@@ -83,10 +83,10 @@
                 <prop key="hibernate.order_inserts">true</prop>
                 <prop key="hibernate.order_updates">true</prop>
                 <prop key="hibernate.current_session_context_class">com.inkubator.datacore.util.TransactionAwareSessionContext</prop>
-                <!--                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
-                <prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>-->
+                                <!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
+                <!--<prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>-->
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.FSDirectoryProvider</prop>
-                <prop key="hibernate.search.default.indexBase">C:/lucen</prop>
+                <prop key="hibernate.search.default.indexBase">E:/lucenIndex</prop>
                 <!--                <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>

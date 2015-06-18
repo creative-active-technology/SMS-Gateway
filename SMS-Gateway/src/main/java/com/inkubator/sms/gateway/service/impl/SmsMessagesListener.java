@@ -46,6 +46,8 @@ public class SmsMessagesListener extends IServiceImpl implements MessageListener
             TextMessage textMessage = (TextMessage) message;
             String json = textMessage.getText();
             SMSSend smss = (SMSSend) jsonConverter.getClassFromJson(json, SMSSend.class);
+            LOGGER.info("Sending Messages " + smss.getContent());
+            LOGGER.info("Sending Messages " + smss.getDestination());
             SmsActivity activity = new SmsActivity();
             activity.setId(Long.parseLong(RandomNumberUtil.getRandomNumber(9)));
             activity.setContentSms(smss.getContent());
@@ -59,10 +61,14 @@ public class SmsMessagesListener extends IServiceImpl implements MessageListener
             smsActivityDao.save(activity);
             OutboundMessage msg = new OutboundMessage(smss.getDestination(), smss.getContent());
             msg.setFlashSms(false);
-            Service.getInstance().sendMessage(msg,smss.getModemId());
-            
+            if (smss.getModemId() == null) {
+                Service.getInstance().sendMessage(msg);
+            } else {
+                Service.getInstance().sendMessage(msg, smss.getModemId());
+            }
+
             LOGGER.info("Sending SMS Done");
-        } catch (JMSException | NumberFormatException | TimeoutException | GatewayException | IOException | InterruptedException ex) {
+        } catch (Exception ex) {
             LOGGER.error("Error", ex);
         }
 //        } catch (JMSException | TimeoutException | GatewayException | IOException | InterruptedException ex) {

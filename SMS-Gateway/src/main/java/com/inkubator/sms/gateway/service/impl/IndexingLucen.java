@@ -29,7 +29,8 @@ public class IndexingLucen {
             Session session = sessionFactory.getCurrentSession();
 
             FullTextSession fullTextSession = Search.getFullTextSession(session);
-            fullTextSession.createIndexer().startAndWait();
+            fullTextSession.createIndexer().optimizeAfterPurge(true).purgeAllOnStart(true)
+                    .startAndWait();
         } catch (HibernateException | InterruptedException e) {
             throw e;
         }
