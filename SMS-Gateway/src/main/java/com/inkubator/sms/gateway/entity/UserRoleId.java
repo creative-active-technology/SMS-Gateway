@@ -7,12 +7,15 @@ package com.inkubator.sms.gateway.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Indexed;
 
 /**
  *
  * @author deni
  */
 @Embeddable
+@Indexed
 public class UserRoleId  implements java.io.Serializable {
 
 
@@ -28,7 +31,7 @@ public class UserRoleId  implements java.io.Serializable {
     }
    
 
-
+    @DocumentId
     @Column(name="user_id", nullable=false)
     public long getUserId() {
         return this.userId;
@@ -38,7 +41,7 @@ public class UserRoleId  implements java.io.Serializable {
         this.userId = userId;
     }
 
-
+    @DocumentId
     @Column(name="role_id", nullable=false)
     public long getRoleId() {
         return this.roleId;

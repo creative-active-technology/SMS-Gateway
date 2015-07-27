@@ -20,6 +20,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
@@ -142,6 +143,7 @@ public class Role implements java.io.Serializable {
         this.updatedOn = updatedOn;
     }
 
+    @ContainedIn
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
     public Set<UserRole> getUserRoles() {
         return this.userRoles;
@@ -201,5 +203,4 @@ public class Role implements java.io.Serializable {
         return true;
     }
 
-    
 }

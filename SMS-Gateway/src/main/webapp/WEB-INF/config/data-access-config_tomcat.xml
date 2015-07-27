@@ -47,8 +47,8 @@
         <property name="acquireIncrement" value="5"/>
         <property name="acquireRetryAttempts" value="3"/>
         <property name="acquireRetryDelay" value="4500"/>
-        <property name="maxPoolSize" value="20"/>
-        <property name="minPoolSize" value="10"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="minPoolSize" value="3"/>
         <property name="maxStatements" value="50"/>
         <property name="maxIdleTime" value="1000" />
         <property name="autoCommitOnClose" value="false" />
@@ -86,7 +86,7 @@
                                 <!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
                 <!--<prop key="hibernate.search.default.indexBase">/home/denifahri/lucen</prop>-->
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.FSDirectoryProvider</prop>
-                <prop key="hibernate.search.default.indexBase">E:/lucenIndex</prop>
+                <prop key="hibernate.search.default.indexBase">C:/lucen</prop>
                 <!--                <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
@@ -101,7 +101,7 @@
             </props>
         </property>
     </bean>
-    <bean id="indexLucen" class="com.inkubator.sms.gateway.service.impl.IndexingLucen" lazy-init="false" init-method="indexAll" />
+    <bean id="indexingLucenService" class="com.inkubator.sms.gateway.service.impl.IndexingLucenServiceImpl" lazy-init="false" init-method="indexAll" />
     <bean class="org.springframework.orm.hibernate4.HibernateTransactionManager" id="transactionManager" lazy-init="true">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

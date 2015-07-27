@@ -8,7 +8,6 @@ package com.inkubator.sms.gateway.dao.impl;
 import com.inkubator.datacore.dao.impl.IDAOImpl;
 import com.inkubator.sms.gateway.dao.ModemDefinitionDao;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
-import com.inkubator.sms.gateway.entity.TaskDefinition;
 import java.util.List;
 import org.apache.lucene.search.Query;
 import org.hibernate.Criteria;

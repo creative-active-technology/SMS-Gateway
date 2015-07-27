@@ -112,7 +112,7 @@
                                     <p:column style="width: 13%;background-color: #e1f0f0!important" >
                                         <p:outputLabel  value="#{appmsg['user_form_check_password']}" styleClass="label_hrm" for="checkpassword"/>
                                     </p:column>
-                                    <p:column style="width: 37%" >
+                                    <p:column style="width: 37%"  colspan="1">
                                         <p:password id="checkpassword"  maxlength="100"
                                                     feedback="false" 
                                                     required="false" disabled="#{userFormController.isUpdate}"
@@ -120,9 +120,10 @@
                                         </p:password>
                                         <p:message for="checkpassword"/>
                                     </p:column>
+                                    <p:column  colspan="2"/>
                                 </p:row>
                             </p:panelGrid>
-                            <p:separator/>
+
                             <div align="center">
                                 <p:pickList value="#{userFormController.dualListModel}" var="role" itemValue="#{role}" converter="roleConverter" id="picklistUserRoleId"
                                             required="true"  style="margin-top: 15px;margin-bottom: 15px" label="#{appmsg['role_view.header1']}" styleClass="isitext_hrm"
@@ -130,6 +131,7 @@
                                             removeLabel="#{appmsg['global.remove']}"/>
                                 <p:message for="picklistUserRoleId" />
                             </div>  
+                            <p:separator/>
                             <h:panelGrid columns="2">
                                 <p:commandButton value="#{appmsg['global.save']}" icon="ui-icon-disk" action="#{userFormController.doSave()}" update="smsSchedulerId,:growlModemConfig" />
                                 <p:commandButton value="#{appmsg['global.cancel']}" title="Batal" process="@this" update="smsSchedulerId" action="#{schedullerSendingSMSController.doReset()}" immediate="true"

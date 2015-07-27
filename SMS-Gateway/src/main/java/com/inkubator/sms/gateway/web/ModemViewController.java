@@ -7,7 +7,9 @@ package com.inkubator.sms.gateway.web;
 
 import com.inkubator.common.notification.model.SerialGateWay;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
+import com.inkubator.sms.gateway.service.IndexingLucenService;
 import com.inkubator.sms.gateway.service.ModemDefinitionService;
+import com.inkubator.sms.gateway.service.impl.IndexingLucenServiceImpl;
 import com.inkubator.sms.gateway.service.impl.ModemManageService;
 import com.inkubator.webcore.controller.BaseController;
 import java.io.IOException;
@@ -21,7 +23,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.smslib.AGateway;
 import org.smslib.GatewayException;
-import org.smslib.SMSLibException;
 import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.USSDRequest;
@@ -36,6 +37,8 @@ public class ModemViewController extends BaseController {
 
     @ManagedProperty(value = "#{modemDefinitionService}")
     private ModemDefinitionService modemDefinitionService;
+    @ManagedProperty(value = "#{indexingLucenService}")
+    private IndexingLucenService indexingLucenService;
     private List<ModemDefinition> dataModemDefinitions = new ArrayList<>();
     private String param;
     private ModemDefinition selectedModemDefinition;
@@ -173,4 +176,17 @@ public class ModemViewController extends BaseController {
         }
 
     }
+
+    public void doIndexing() {
+        try {
+            indexingLucenService.indexAll();
+        } catch (Exception ex) {
+            Logger.getLogger(ModemViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setIndexingLucenService(IndexingLucenService indexingLucenService) {
+        this.indexingLucenService = indexingLucenService;
+    }
+
 }

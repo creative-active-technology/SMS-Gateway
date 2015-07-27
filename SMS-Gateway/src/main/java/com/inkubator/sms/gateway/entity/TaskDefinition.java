@@ -47,6 +47,7 @@ public class TaskDefinition implements java.io.Serializable {
     private Date cretedOn;
     private String updatedBy;
     private Date updatedOn;
+    private Integer sendingCount;
 
     public TaskDefinition() {
     }
@@ -255,6 +256,16 @@ public class TaskDefinition implements java.io.Serializable {
             return false;
         }
         return true;
+    }
+
+    @Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+    @Column(name = "sending_count")
+    public Integer getSendingCount() {
+        return sendingCount;
+    }
+
+    public void setSendingCount(Integer sendingCount) {
+        this.sendingCount = sendingCount;
     }
 
 }

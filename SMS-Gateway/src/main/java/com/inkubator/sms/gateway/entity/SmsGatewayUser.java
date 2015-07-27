@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
@@ -217,6 +218,7 @@ public class SmsGatewayUser implements java.io.Serializable {
         this.updatedOn = updatedOn;
     }
 
+    @ContainedIn
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     public Set<UserRole> getUserRoles() {
         return this.userRoles;
@@ -235,7 +237,7 @@ public class SmsGatewayUser implements java.io.Serializable {
         this.roles = roles;
     }
 
-        @Transient
+    @Transient
     public String getAcitveAsString() {
         String data = null;
         if (isActive == 1) {

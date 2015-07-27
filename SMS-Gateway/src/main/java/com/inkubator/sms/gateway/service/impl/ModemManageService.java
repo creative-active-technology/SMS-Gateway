@@ -102,6 +102,7 @@ public class ModemManageService {
                 approvalModel.setSmsContent(msg.getText());
                 Service.getInstance().deleteMessage(msg);
                 final String dataToSend = jsonConverter.getJson(approvalModel);
+                 LOGGER.info("ISI JSON " + dataToSend);
                 jmsSenderSms.send(new MessageCreator() {
                     @Override
                     public javax.jms.Message createMessage(Session session)
@@ -109,6 +110,7 @@ public class ModemManageService {
                         return session.createTextMessage(dataToSend);
                     }
                 });
+                   LOGGER.info("ISI JSON Terkirim");
 //                approvalModel.setApproverNumberHp(msg.getOriginator());
 //                Service.getInstance().deleteMessage(msg);//harus disini jika terjadi error parsing message tetap terdelere dan tidak menumpuk di kartu
 //                approvalModel.setApproveCondition(st.nextToken());

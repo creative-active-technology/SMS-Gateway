@@ -9,6 +9,7 @@ import com.inkubator.common.util.DateFormatter;
 import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.sms.gateway.SMSGATEWAY;
 import com.inkubator.sms.gateway.entity.SmsGatewayUser;
+import com.inkubator.sms.gateway.service.IndexingLucenService;
 import com.inkubator.sms.gateway.service.UserService;
 import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
@@ -16,6 +17,8 @@ import com.inkubator.webcore.util.MessagesResourceUtil;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -45,6 +48,8 @@ public class LoginController extends BaseController {
     private DateFormatter dateFormatter;
     @ManagedProperty(value = "#{userService}")
     private UserService userService;
+//    @ManagedProperty(value = "#{indexingLucenService}")
+//    private IndexingLucenService indexingLucenService;
 
 //    public String doLogin() {
 //        System.out.println(" hahahahah");
@@ -133,4 +138,17 @@ public class LoginController extends BaseController {
         this.userService = userService;
     }
 
+//    public void doIndex(){
+//        try {
+//            indexingLucenService.indexAll();
+//        } catch (Exception ex) {
+//            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+//
+//    public void setIndexingLucenService(IndexingLucenService indexingLucenService) {
+//        this.indexingLucenService = indexingLucenService;
+//    }
+    
+    
 }

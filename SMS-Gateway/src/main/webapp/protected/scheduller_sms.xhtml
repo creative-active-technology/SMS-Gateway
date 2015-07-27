@@ -55,14 +55,14 @@
                                     <f:selectItem itemLabel="#{appmsg['sms.every_week']}" itemValue="EVERYWEEK"/>
                                     <f:selectItem itemLabel="#{appmsg['sms.every_month']}" itemValue="EVERYMONTH" />
                                     <f:selectItem itemLabel="#{appmsg['sms.every_year']}" itemValue="EVERYYEAR" />
-                                    <f:selectItem itemLabel="#{appmsg['sms.certain_time']}" itemValue="ONETIME" />
+                                    <!--<f:selectItem itemLabel="#{appmsg['sms.certain_time']}" itemValue="ONETIME" />-->
 
                                 </p:selectOneMenu>
                                 <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
 
-                                <p:outputLabel value=" #{appmsg['sms.repetition_1']} " for="timeSend" />
+                                <p:outputLabel value=" #{appmsg['sms.repetition_1']} Jeda waktu 1 menit " for="timeSend" />
                                 <p:outputLabel value="#{appmsg['sms.sent_time']}" for="timeSend" />
-                                <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}" readonly="true"/>
+                                <p:spinner min="1" max="1000" stepFactor="1" size="5"  value="#{schedullerSendingSMSController.schedullerSmsModel.repeatTime}"/>
                                 <pe:timePicker intervalMinutes="10" id="timeSend" required="true" value="#{schedullerSendingSMSController.schedullerSmsModel.sendTime}"/>
 
 

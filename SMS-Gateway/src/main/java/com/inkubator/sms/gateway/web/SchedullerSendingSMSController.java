@@ -61,6 +61,7 @@ public class SchedullerSendingSMSController extends BaseController {
     }
 
     public String saveSchedule() {
+        System.out.println(" Tanggaal kirimnya "+schedullerSmsModel.getSendDate());
         if (schedullerSmsModel.getSendDate().equals(new Date()) || schedullerSmsModel.getSendDate().before(new Date())) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Proses Simpan", "Tanggal pengiriman tidak boleh hari Ini atau kemarin");
             FacesUtil.getFacesContext().addMessage(null, msg);

@@ -7,6 +7,7 @@ package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.common.util.RandomNumberUtil;
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.securitycore.util.UserInfoUtil;
 import com.inkubator.sms.gateway.dao.ModemDefinitionDao;
 import com.inkubator.sms.gateway.dao.TaskDefinitionDao;
 import com.inkubator.sms.gateway.entity.TaskDefinition;
@@ -53,10 +54,12 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(TaskDefinition entity) throws Exception {
+        System.out.println(" User "+UserInfoUtil.getUserName());
         entity.setModemDefinition(modemDefinitionDao.getEntiyByPK(entity.getModemDefinition().getId()));
         entity.setId(Long.parseLong(RandomNumberUtil.getRandomNumber(12)));
-        entity.setCreatedBy("System");
+        entity.setCreatedBy(UserInfoUtil.getUserName());
         entity.setCretedOn(new Date());
+        entity.setSendingCount(0);
         this.taskDefinitionDao.save(entity);
     }
 
