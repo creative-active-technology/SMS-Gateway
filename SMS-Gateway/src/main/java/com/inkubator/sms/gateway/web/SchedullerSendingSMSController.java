@@ -5,6 +5,7 @@
  */
 package com.inkubator.sms.gateway.web;
 
+import com.inkubator.common.util.JsonConverter;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.entity.TaskDefinition;
 import com.inkubator.sms.gateway.service.TaskDefinitionService;
@@ -37,6 +38,8 @@ public class SchedullerSendingSMSController extends BaseController {
     private LazyDataModel<TaskDefinition> lazyDataModel;
     private String pencarian;
     private TaskDefinition selectedTaskDefinition;
+    @ManagedProperty(value = "#{jsonGsonConverter}")
+    private JsonConverter jsonGsonConverter;
 
     @Override
     public void initialization() {
@@ -61,7 +64,7 @@ public class SchedullerSendingSMSController extends BaseController {
     }
 
     public String saveSchedule() {
-        System.out.println(" Tanggaal kirimnya "+schedullerSmsModel.getSendDate());
+        System.out.println(" Tanggaal kirimnya " + schedullerSmsModel.getSendDate());
         if (schedullerSmsModel.getSendDate().equals(new Date()) || schedullerSmsModel.getSendDate().before(new Date())) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Proses Simpan", "Tanggal pengiriman tidak boleh hari Ini atau kemarin");
             FacesUtil.getFacesContext().addMessage(null, msg);
@@ -96,6 +99,13 @@ public class SchedullerSendingSMSController extends BaseController {
             schedullerSmsModel.setListPhoneAsString(schedullerSmsModel.getDestination());
         }
         schedullerSmsModel.setDestination("");
+//        List<String> data = schedullerSmsModel.getListPhone();
+//        System.out.println(" list datanya" + data);
+//        if (data != null) {
+//            String jsnon = jsonGsonConverter.getJson(data);
+//            System.out.println(" Nilai Jnosn nya " + jsnon);
+//        }
+
     }
 
     public void setTaskDefinitionService(TaskDefinitionService taskDefinitionService) {
@@ -108,7 +118,7 @@ public class SchedullerSendingSMSController extends BaseController {
             definition.setId(model.getId());
         }
         definition.setDate(model.getSendDate());
-        definition.setDestination(model.getListPhoneAsString());// for multi destination
+        definition.setDestination(jsonGsonConverter.getJson(model.getListPhone()));// for multi destination
         definition.setFromSending(model.getFromSending());
         definition.setIsRepeatOnCondition(model.getIsRepeatOnCondition());
         definition.setModemDefinition(new ModemDefinition(model.getModemId()));
@@ -216,4 +226,11 @@ public class SchedullerSendingSMSController extends BaseController {
             LOGGER.error(ex, ex);
         }
     }
+
+    public void setJsonGsonConverter(JsonConverter jsonGsonConverter) {
+        this.jsonGsonConverter = jsonGsonConverter;
+    }
+
+    
+
 }

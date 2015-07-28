@@ -28,4 +28,11 @@ public class SMSGATEWAY {
     public static final Integer EMAIL_NOTIFICATION_NOT_YET_SEND = 0;
     public static final String INKUBA_SYSTEM = "INKUBA_SYSTEM";
     public static final String USER_RESET = "user_reset";
+    public static final String SMS_REPEAT = "REPEAT";
+    public static final String SMS_ONCE = "ONETIME";
+    public static final String EVERY_DAY = "EVERYDAY";
+    public static final String EVERY_WEEK = "EVERYWEEK";
+    public static final String EVERY_MONTH = "EVERYMONTH";
+    public static final String EVERY_YEAR = "EVERYYEAR";
+
 }
