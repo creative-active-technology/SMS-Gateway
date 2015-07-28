@@ -58,7 +58,7 @@
                                     <!--<f:selectItem itemLabel="#{appmsg['sms.certain_time']}" itemValue="ONETIME" />-->
 
                                 </p:selectOneMenu>
-                                <p:calendar id="sendDate"  pattern="dd MMMM yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
+                                <p:calendar id="sendDate"  pattern="dd/MM/yyyy" value="#{schedullerSendingSMSController.schedullerSmsModel.sendDate}"/>
 
                                 <p:outputLabel value=" #{appmsg['sms.repetition_1']} Jeda waktu 1 menit " for="timeSend" />
                                 <p:outputLabel value="#{appmsg['sms.sent_time']}" for="timeSend" />

@@ -42,8 +42,8 @@ public class SchedullerSendingSMSController extends BaseController {
     public void initialization() {
         try {
             schedullerSmsModel = new SchedullerSmsModel();
-            schedullerSmsModel.setRepeatTime(0);
-            schedullerSmsModel.setFromSending("System");
+            schedullerSmsModel.setRepeatTime(1);
+//            schedullerSmsModel.setFromSending("System");
             isDisable = Boolean.FALSE;
 //            List<TaskDefinition> dataToShow = taskDefinitionService.getAllByFullTextService(null, 0, 2, null);
 //            System.out.println(" Jumlah Data " + dataToShow.size());
