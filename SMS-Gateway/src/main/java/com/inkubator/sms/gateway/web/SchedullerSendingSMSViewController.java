@@ -162,13 +162,14 @@ public class SchedullerSendingSMSViewController extends BaseController {
         lazyDataModel = null;
     }
 
-    public void doEdit() {
-        try {
-            selectedTaskDefinition = taskDefinitionService.getEntiyByPK(selectedTaskDefinition.getId());
-            schedullerSmsModel = getModelFromEntity(selectedTaskDefinition);
-        } catch (Exception ex) {
-            LOGGER.error(ex, ex);
-        }
+    public String doEdit() {
+        return "/protected/scheduller_sms.htm?faces-redirect=true&execution=e" + selectedTaskDefinition.getId();
+//        try {
+//            selectedTaskDefinition = taskDefinitionService.getEntiyByPK(selectedTaskDefinition.getId());
+//            schedullerSmsModel = getModelFromEntity(selectedTaskDefinition);
+//        } catch (Exception ex) {
+//            LOGGER.error(ex, ex);
+//        }
     }
 
     public TaskDefinition getSelectedTaskDefinition() {
@@ -214,5 +215,10 @@ public class SchedullerSendingSMSViewController extends BaseController {
         } catch (Exception ex) {
             LOGGER.error(ex, ex);
         }
+    }
+
+    public String doDetail() {
+        return "/protected/scheduller_sms_detail.htm?faces-redirect=true&execution=e" + selectedTaskDefinition.getId();
+
     }
 }

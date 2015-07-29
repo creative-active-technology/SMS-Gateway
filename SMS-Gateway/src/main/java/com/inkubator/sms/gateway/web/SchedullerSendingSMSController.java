@@ -5,9 +5,13 @@
  */
 package com.inkubator.sms.gateway.web;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.inkubator.common.util.JsonConverter;
 import com.inkubator.sms.gateway.entity.ModemDefinition;
 import com.inkubator.sms.gateway.entity.TaskDefinition;
+import com.inkubator.sms.gateway.service.ModemDefinitionService;
 import com.inkubator.sms.gateway.service.TaskDefinitionService;
 import com.inkubator.sms.gateway.web.lazymodel.TaskDefinitionLazy;
 import com.inkubator.sms.gateway.web.model.SchedullerSmsModel;
@@ -15,7 +19,9 @@ import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -37,17 +43,61 @@ public class SchedullerSendingSMSController extends BaseController {
     private Boolean isDisable;
     private LazyDataModel<TaskDefinition> lazyDataModel;
     private String pencarian;
-    private TaskDefinition selectedTaskDefinition;
+//    private TaskDefinition selectedTaskDefinition;
     @ManagedProperty(value = "#{jsonGsonConverter}")
     private JsonConverter jsonGsonConverter;
+    private Map<String, Long> mapOfModem = new HashMap<>();
+    private List<ModemDefinition> listModemDefinitions = new ArrayList<>();
+    @ManagedProperty(value = "#{modemDefinitionService}")
+    private ModemDefinitionService modemDefinitionService;
+    private Boolean isEdit;
 
     @Override
     public void initialization() {
         try {
-            schedullerSmsModel = new SchedullerSmsModel();
-            schedullerSmsModel.setRepeatTime(1);
+            super.initialization();
+            String id = FacesUtil.getRequestParameter("execution");
+            listModemDefinitions = this.modemDefinitionService.getAllData();
+            for (ModemDefinition definition : listModemDefinitions) {
+                mapOfModem.put(definition.getModemId() + "-" + definition.getManufacture(), definition.getId());
+            }
+            if (id != null) {
+                TaskDefinition selectedTaskDefinition = taskDefinitionService.getEntiyByPK(Long.parseLong(id.substring(1)));
+                schedullerSmsModel = new SchedullerSmsModel();
+                schedullerSmsModel.setId(selectedTaskDefinition.getId());
+                schedullerSmsModel.setDestination(selectedTaskDefinition.getDestination());
+                schedullerSmsModel.setModemId(selectedTaskDefinition.getModemDefinition().getId());
+                schedullerSmsModel.setFromSending(selectedTaskDefinition.getFromSending());
+                schedullerSmsModel.setIsRepeatOnCondition(selectedTaskDefinition.getIsRepeatOnCondition());
+                schedullerSmsModel.setSendDate(selectedTaskDefinition.getDate());
+                schedullerSmsModel.setSendTime(selectedTaskDefinition.getTime());
+                schedullerSmsModel.setName(selectedTaskDefinition.getName());
+                schedullerSmsModel.setRepeatTime(selectedTaskDefinition.getRepeatTime());
+                schedullerSmsModel.setSmsContent(selectedTaskDefinition.getSmsContent());
+                schedullerSmsModel.setScheduleType(selectedTaskDefinition.getScheduleType());
+               
+                Gson gson = new GsonBuilder().create();
+                TypeToken<List<String>> token = new TypeToken<List<String>>() {
+                };
+                List<String> toLoop = gson.fromJson(selectedTaskDefinition.getDestination(), token.getType());
+                schedullerSmsModel.setListPhone(toLoop);
+                for (String toLoop1 : toLoop) {
+                    if (schedullerSmsModel.getListPhoneAsString() != null) {
+                        schedullerSmsModel.setListPhoneAsString(schedullerSmsModel.getListPhoneAsString() + ";" + toLoop1);
+                    } else {
+                        schedullerSmsModel.setListPhoneAsString(toLoop1);
+                    }
+                }
+                schedullerSmsModel.setDestination("");
+                isEdit = Boolean.TRUE;
+            } else {
+                schedullerSmsModel = new SchedullerSmsModel();
+                schedullerSmsModel.setRepeatTime(1);
 //            schedullerSmsModel.setFromSending("System");
-            isDisable = Boolean.FALSE;
+                isDisable = Boolean.FALSE;
+                isEdit = Boolean.FALSE;
+            }
+
 //            List<TaskDefinition> dataToShow = taskDefinitionService.getAllByFullTextService(null, 0, 2, null);
 //            System.out.println(" Jumlah Data " + dataToShow.size());
         } catch (Exception ex) {
@@ -71,12 +121,17 @@ public class SchedullerSendingSMSController extends BaseController {
         } else {
             TaskDefinition definition = getEntityFromModel(schedullerSmsModel);
             try {
-                this.taskDefinitionService.save(definition);
+                if (isEdit) {
+                    this.taskDefinitionService.update(definition);
+                } else {
+                    this.taskDefinitionService.save(definition);
+                }
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Proses Simpan", "Schedule pengiriman sms berhasil disimpan");
                 FacesUtil.getFacesContext().addMessage(null, msg);
                 FacesUtil.getExternalContext().getFlash().setKeepMessages(true);
                 initialization();
                 return "/protected/scheduller_sms_view.htm?faces-redirect=true";
+
             } catch (Exception ex) {
                 LOGGER.error(ex, ex);
             }
@@ -173,23 +228,21 @@ public class SchedullerSendingSMSController extends BaseController {
         lazyDataModel = null;
     }
 
-    public void doEdit() {
-        try {
-            selectedTaskDefinition = taskDefinitionService.getEntiyByPK(selectedTaskDefinition.getId());
-            schedullerSmsModel = getModelFromEntity(selectedTaskDefinition);
-        } catch (Exception ex) {
-            LOGGER.error(ex, ex);
-        }
-    }
-
-    public TaskDefinition getSelectedTaskDefinition() {
-        return selectedTaskDefinition;
-    }
-
-    public void setSelectedTaskDefinition(TaskDefinition selectedTaskDefinition) {
-        this.selectedTaskDefinition = selectedTaskDefinition;
-    }
-
+//    public void doEdit() {
+//        try {
+//            selectedTaskDefinition = taskDefinitionService.getEntiyByPK(selectedTaskDefinition.getId());
+//            schedullerSmsModel = getModelFromEntity(selectedTaskDefinition);
+//        } catch (Exception ex) {
+//            LOGGER.error(ex, ex);
+//        }
+//    }
+//    public TaskDefinition getSelectedTaskDefinition() {
+//        return selectedTaskDefinition;
+//    }
+//
+//    public void setSelectedTaskDefinition(TaskDefinition selectedTaskDefinition) {
+//        this.selectedTaskDefinition = selectedTaskDefinition;
+//    }
     public SchedullerSmsModel getModelFromEntity(TaskDefinition definition) {
         List<String> dataTosave = new ArrayList();
         schedullerSmsModel = new SchedullerSmsModel();
@@ -218,19 +271,44 @@ public class SchedullerSendingSMSController extends BaseController {
 
     }
 
-    public void doDelete() {
-        try {
-            this.taskDefinitionService.delete(selectedTaskDefinition);
-            lazyDataModel = null;
-        } catch (Exception ex) {
-            LOGGER.error(ex, ex);
-        }
-    }
-
+//    public void doDelete() {
+//        try {
+//            this.taskDefinitionService.delete(selectedTaskDefinition);
+//            lazyDataModel = null;
+//        } catch (Exception ex) {
+//            LOGGER.error(ex, ex);
+//        }
+//    }
     public void setJsonGsonConverter(JsonConverter jsonGsonConverter) {
         this.jsonGsonConverter = jsonGsonConverter;
     }
 
-    
+    public void setModemDefinitionService(ModemDefinitionService modemDefinitionService) {
+        this.modemDefinitionService = modemDefinitionService;
+    }
+
+    public Map<String, Long> getMapOfModem() {
+        return mapOfModem;
+    }
+
+    public void setMapOfModem(Map<String, Long> mapOfModem) {
+        this.mapOfModem = mapOfModem;
+    }
+
+    public List<ModemDefinition> getListModemDefinitions() {
+        return listModemDefinitions;
+    }
+
+    public void setListModemDefinitions(List<ModemDefinition> listModemDefinitions) {
+        this.listModemDefinitions = listModemDefinitions;
+    }
+
+    public Boolean getIsEdit() {
+        return isEdit;
+    }
+
+    public void setIsEdit(Boolean isEdit) {
+        this.isEdit = isEdit;
+    }
 
 }

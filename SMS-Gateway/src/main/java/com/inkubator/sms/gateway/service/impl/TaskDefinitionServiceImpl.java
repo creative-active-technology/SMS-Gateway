@@ -48,13 +48,15 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     @Override
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
     public TaskDefinition getEntiyByPK(Long id) throws Exception {
-        return this.taskDefinitionDao.getByFullText(id);
+        TaskDefinition definition = taskDefinitionDao.getByFullText(id);
+        definition.getModemDefinition().getManufacture();
+        return definition;
     }
 
     @Override
     @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void save(TaskDefinition entity) throws Exception {
-        System.out.println(" User "+UserInfoUtil.getUserName());
+        System.out.println(" User " + UserInfoUtil.getUserName());
         entity.setModemDefinition(modemDefinitionDao.getEntiyByPK(entity.getModemDefinition().getId()));
         entity.setId(Long.parseLong(RandomNumberUtil.getRandomNumber(12)));
         entity.setCreatedBy(UserInfoUtil.getUserName());
@@ -64,8 +66,24 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     }
 
     @Override
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void update(TaskDefinition entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TaskDefinition taskDefinition = taskDefinitionDao.getEntiyByPK(entity.getId());
+        taskDefinition.setDate(entity.getDate());
+        taskDefinition.setDestination(entity.getDestination());
+        taskDefinition.setFromSending(entity.getFromSending());
+        taskDefinition.setModemDefinition(modemDefinitionDao.getEntiyByPK(entity.getModemDefinition().getId()));
+        taskDefinition.setIsRepeatOnCondition(entity.getIsRepeatOnCondition());
+        taskDefinition.setName(entity.getName());
+        taskDefinition.setRepeatTime(entity.getRepeatTime());
+        taskDefinition.setScheduleType(entity.getScheduleType());
+        taskDefinition.setSendingCount(entity.getSendingCount());
+        taskDefinition.setSmsContent(entity.getSmsContent());
+        taskDefinition.setTime(entity.getTime());
+        taskDefinition.setUpdatedBy(UserInfoUtil.getUserName());
+        taskDefinition.setUpdatedOn(new Date());
+        this.taskDefinitionDao.update(taskDefinition);
+
     }
 
     @Override
@@ -134,7 +152,7 @@ public class TaskDefinitionServiceImpl extends IServiceImpl implements TaskDefin
     }
 
     @Override
-    @Transactional(readOnly = false,isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delete(TaskDefinition entity) throws Exception {
         this.taskDefinitionDao.delete(entity);
     }

@@ -12,6 +12,7 @@ import com.inkubator.sms.gateway.service.SmsActivityService;
 import com.inkubator.sms.gateway.web.model.SmsSendModel;
 import com.inkubator.webcore.controller.BaseController;
 import com.inkubator.webcore.util.FacesUtil;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,8 +24,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.smslib.GatewayException;
 import org.smslib.InboundMessage;
 import org.smslib.Service;
+import org.smslib.TimeoutException;
 
 /**
  *
@@ -146,9 +149,11 @@ public class SendingSMSController extends BaseController {
                 Service.getInstance().deleteMessage(data1);
             }
 
-        } catch (Exception ex) {
+        } catch (TimeoutException | GatewayException | IOException | InterruptedException ex) {
             Logger.getLogger(SendingSMSController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
+    
+    
 }
