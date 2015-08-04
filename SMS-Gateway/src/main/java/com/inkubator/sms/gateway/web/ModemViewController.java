@@ -26,6 +26,7 @@ import org.smslib.GatewayException;
 import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.USSDRequest;
+import org.smslib.modem.SerialModemGateway;
 
 /**
  *
@@ -120,6 +121,7 @@ public class ModemViewController extends BaseController {
         try {
             if (Service.getInstance().getServiceStatus().equals(Service.ServiceStatus.STOPPED)) {
                 dataModemDefinitions = this.modemDefinitionService.getAllData();
+                SerialModemGateway smsg = null;
                 for (ModemDefinition dataModemDefinition : dataModemDefinitions) {
                     if (Service.getInstance().getGateway(dataModemDefinition.getModemId()) == null) {
                         SerialGateWay gateWay = new SerialGateWay();
@@ -132,11 +134,15 @@ public class ModemViewController extends BaseController {
                         gateWay.setOutBound(true);
                         gateWay.setPinNumber(String.valueOf(dataModemDefinition.getPinNumber()));
                         gateWay.setSmscNumber(dataModemDefinition.getSmscNumber());
+                        smsg = modemManageService.startServiceAndAddGateway(gateWay);
 
-                        modemManageService.startServiceAndAddGateway(gateWay);
+//            try {
                     }
                 }
                 Service.getInstance().startService(false);
+                String resp = smsg.sendCustomATCommand("AT+CUSD=0,\"*888#\",15\r");
+//                    String resp = smsg.sendUSSDCommand("*");
+                System.out.println(" Perintah nya " + resp);
             }
         } catch (Exception ex) {
             LOGGER.error(ex, ex);
@@ -162,13 +168,15 @@ public class ModemViewController extends BaseController {
     }
 
     public void doCheckBalance() {
-        USSDRequest request = new USSDRequest("AT+CUSD=1,\"*888#\",15\r");
+        USSDRequest request = new USSDRequest("AT+CUSD=1,\"\"*123#\"\",15\r");
         System.out.println(" Ini perintahnya USSD nya" + request.getContent());
         for (ModemDefinition dataModemDefinition : dataModemDefinitions) {
             try {
                 AGateway aGateway = Service.getInstance().findGateway(dataModemDefinition.getModemId());
-                aGateway.sendUSSDCommand("*888#");
-                System.out.println(" ini berhasisisisillll");
+
+                String data = aGateway.sendUSSDCommand("AT+CUSD=1,\"*123#\",15\r");
+
+                System.out.println(" ini berhasisisisillll" + data);
 //                 Service.getInstance().sendUSSDRequest(request, dataModemDefinition.getModemId());
             } catch (GatewayException | TimeoutException | IOException | InterruptedException ex) {
                 Logger.getLogger(ModemViewController.class.getName()).log(Level.SEVERE, null, ex);

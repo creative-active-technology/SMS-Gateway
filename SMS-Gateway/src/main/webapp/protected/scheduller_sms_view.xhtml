@@ -111,7 +111,7 @@
                                 </p:commandButton>
                                 - 
                                 <p:commandButton  icon="ui-icon-trash" title="#{appmsg['global.delete']}" label="#{appmsg['global.delete']}"  style="font-size: 10px!important"  update=":deleteDialogFormId"
-                                                  onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" action="#{schedullerViewController.onDelete()}" >
+                                                  onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" >
                                     <f:setPropertyActionListener value="#{tastDefinitions}" target="#{schedullerViewController.selectedTaskDefinition}" />
                                 </p:commandButton>
                                 -
@@ -143,12 +143,15 @@
                                     </h:panelGrid>
                                 </div>
                                 <h:panelGrid  columns="3">
-                                    <p:outputLabel value="#{appmsg['modem.modem_specification']}" styleClass="label_hrm"/>
+                                    <p:outputLabel value="Nama Scheduller" styleClass="label_hrm"/>
                                     <p:outputLabel value=":"  styleClass="label_hrm" />
-                                    <p:outputLabel value="#{modemViewController.selectedModemDefinition.manufacture} - #{modemViewController.selectedModemDefinition.comId}" styleClass="isitext_hrm"/>
+                                    <p:outputLabel value="#{schedullerViewController.selectedTaskDefinition.name}" styleClass="isitext_hrm"/>
+                                     <p:outputLabel value="Jenis Modem" styleClass="label_hrm"/>
+                                    <p:outputLabel value=":"  styleClass="label_hrm" />
+                                    <p:outputLabel value="#{schedullerViewController.selectedTaskDefinition.modemDefinition.manufacture}" styleClass="isitext_hrm"/>
                                 </h:panelGrid>
                                 <p:separator/>
-                                <p:commandButton value="#{appmsg['global.yes']}" action="#{modemViewController.doDelete()}" id="yesId" title="#{appmsg['global.yes']}" styleClass="isitext_hrm" update=":modemViewFormId"
+                                <p:commandButton value="#{appmsg['global.yes']}" action="#{schedullerViewController.doDelete()}" id="yesId" title="#{appmsg['global.yes']}" styleClass="isitext_hrm" update=":modemViewFormId"
                                                  oncomplete="PF('confirmDialogDelete').hide()" style="margin-right: 5px" icon="ui-icon-check"/>
                                 <p:commandButton value="#{appmsg['global.no']}" oncomplete="PF('confirmDialogDelete').hide()" icon="ui-icon-close" title="#{appmsg['global.no']}"  styleClass="isitext_hrm"/>
 

@@ -38,7 +38,7 @@
                         <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
                             <p:commandButton value="#{appmsg['global.add']}"  icon="ui-icon-plus" action="#{modemViewController.doAdd()}"/>
                             <p:commandButton value="Do Indexing"  icon="ui-icon-plus" action="#{modemViewController.doIndexing()}"  ajax="false"/>
-                            <p:commandButton value="#{appmsg['modem.activate_modem']}"  icon="ui-icon-signal-diag"  title="#{appmsg['modem.activate_all_modem']}" action="#{modemViewController.doConnect()}" update="tableModemId"/>
+                            <p:commandButton value="#{appmsg['modem.activate_modem']}"  icon="ui-icon-signal-diag"  title="#{appmsg['modem.activate_all_modem']}" action="#{modemViewController.doConnect()}" update="tableModemId" id="activeModemId"/>
                             <p:commandButton value="#{appmsg['modem.turn_off_service']}"  icon="ui-icon-signal"  title="#{appmsg['modem.turn_off_all_sevice']}" action="#{modemViewController.doOffService()}" update="tableModemId" />
                         </h:panelGrid>
                         <div style="clear: both" />
@@ -124,7 +124,12 @@
                                 </p:outputLabel>
                             </p:column>
                         </p:dataTable>
-
+                        <p:blockUI block="modemViewFormId" trigger="activeModemId" >
+                            <h:panelGrid columns="2" styleClass="grid_no_border">
+                                <h:graphicImage library="images" name="loading.gif" width="42" height="42"/>
+                                <h:outputLabel value="#{appmsg['global.waiting']}" styleClass="label_hrm"/>
+                            </h:panelGrid>
+                        </p:blockUI>
                     </h:form>
                     <p:dialog widgetVar="confirmDialogDelete" header="Konfirmasi Delete" modal="true" width="450" dynamic="true" onShow="PF('statusDialog').hide()"
                               appendTo="@(body)" resizable="false" id="confirmDialogDeleteId" hideEffect="puff" showEffect="clip" closeOnEscape="true"  styleClass="header_small_no_bold">

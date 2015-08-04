@@ -204,14 +204,10 @@ public class SchedullerSendingSMSViewController extends BaseController {
         return schedullerSmsModel;
     }
 
-    public void onDelete() {
-
-    }
-
+    
     public void doDelete() {
         try {
             this.taskDefinitionService.delete(selectedTaskDefinition);
-            lazyDataModel = null;
         } catch (Exception ex) {
             LOGGER.error(ex, ex);
         }

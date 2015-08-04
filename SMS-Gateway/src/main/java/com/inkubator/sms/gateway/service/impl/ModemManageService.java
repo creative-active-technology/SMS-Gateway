@@ -8,6 +8,10 @@ package com.inkubator.sms.gateway.service.impl;
 import com.inkubator.common.notification.model.SerialGateWay;
 import com.inkubator.common.util.JsonConverter;
 import com.inkubator.sms.gateway.web.model.ApprovalModel;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.jms.JMSException;
 import javax.jms.Session;
 import org.apache.log4j.Logger;
@@ -24,6 +28,7 @@ import org.smslib.InboundMessage;
 import org.smslib.Message;
 import org.smslib.OutboundMessage;
 import org.smslib.Service;
+import org.smslib.TimeoutException;
 import org.smslib.USSDResponse;
 import org.smslib.modem.SerialModemGateway;
 import org.springframework.jms.core.JmsTemplate;
@@ -38,11 +43,12 @@ public class ModemManageService {
     private static final Logger LOGGER = Logger.getLogger(ModemManageService.class);
     private JsonConverter jsonConverter;
     private JmsTemplate jmsSenderSms;
+    private static final Pattern CUSD_RESPONSE_PATTERN = Pattern.compile("\\s+\\+CUSD: (\\d+)(?:,\"(.*)\", ?\\d+)?\\s+", Pattern.DOTALL);
 
-    public void startServiceAndAddGateway(SerialGateWay gateway) {
-
+    public SerialModemGateway startServiceAndAddGateway(SerialGateWay gateway) {
+        SerialModemGateway modemGateway = null;
         try {
-            SerialModemGateway modemGateway = new SerialModemGateway(gateway.getModemId(), gateway.getComPort(), gateway.getBaudRate(), gateway.getManaufactur(), gateway.getModelName());
+            modemGateway = new SerialModemGateway(gateway.getModemId(), gateway.getComPort(), gateway.getBaudRate(), gateway.getManaufactur(), gateway.getModelName());
             modemGateway.setInbound(gateway.getInBound());
             modemGateway.setOutbound(gateway.getOutBound());
             modemGateway.setSimPin(gateway.getPinNumber());
@@ -50,13 +56,16 @@ public class ModemManageService {
             modemGateway.setOutbound(true);
             modemGateway.setInbound(true);
             modemGateway.setProtocol(Protocols.PDU);
-            modemGateway.getATHandler().setStorageLocations("SMME");
+//            modemGateway.getATHandler().setStorageLocations("SMME");
 //            try {
-//                String resp = modemGateway.sendCustomATCommand("AT+CUSD=1,\"*888#\",15\r");
-//                System.out.println(" Perintah nya " + resp);
+            String resp = null;
+//            try {
+//                resp = modemGateway.sendCustomATCommand("AT+CUSD=1,\"*123#\",15\r");
 //            } catch (TimeoutException | IOException | InterruptedException ex) {
 //                java.util.logging.Logger.getLogger(ModemManageService.class.getName()).log(Level.SEVERE, null, ex);
 //            }
+//                System.out.println(" Perintah nya " + resp);
+
             InboundNotification inboundNotification = new InboundNotification();
 // Create the notification callback method for inbound voice calls.
             CallNotification callNotification = new CallNotification();
@@ -69,10 +78,11 @@ public class ModemManageService {
             Service.getInstance().setOrphanedMessageNotification(orphanedMessageNotification);
             Service.getInstance().setUSSDNotification(new USSDNotification());
             Service.getInstance().addGateway(modemGateway);
+
         } catch (GatewayException ex) {
             LOGGER.error(ex, ex);
         }
-
+        return modemGateway;
     }
 
     public static class OutboundNotification implements IOutboundMessageNotification {
@@ -102,7 +112,7 @@ public class ModemManageService {
                 approvalModel.setSmsContent(msg.getText());
                 Service.getInstance().deleteMessage(msg);
                 final String dataToSend = jsonConverter.getJson(approvalModel);
-                 LOGGER.info("ISI JSON " + dataToSend);
+                LOGGER.info("ISI JSON " + dataToSend);
                 jmsSenderSms.send(new MessageCreator() {
                     @Override
                     public javax.jms.Message createMessage(Session session)
@@ -110,7 +120,7 @@ public class ModemManageService {
                         return session.createTextMessage(dataToSend);
                     }
                 });
-                   LOGGER.info("ISI JSON Terkirim");
+                LOGGER.info("ISI JSON Terkirim");
 //                approvalModel.setApproverNumberHp(msg.getOriginator());
 //                Service.getInstance().deleteMessage(msg);//harus disini jika terjadi error parsing message tetap terdelere dan tidak menumpuk di kartu
 //                approvalModel.setApproveCondition(st.nextToken());
@@ -155,9 +165,17 @@ public class ModemManageService {
 
     public class USSDNotification implements IUSSDNotification {
 
+        @Override
         public void process(AGateway gateway, USSDResponse response) {
             System.out.println("USSD handler called from Gateway: " + gateway.getGatewayId());
+            System.out.println(response.getContent());
             System.out.println(response);
+//            Matcher m = CUSD_RESPONSE_PATTERN.matcher(response.getRawResponse());
+////            String type = m.group(1);
+////            System.out.println(" Tyoenya " + type);
+//            String nilai = m.group(2);
+//            System.out.println("Nilainya "+nilai);
+            
         }
     }
 
@@ -168,7 +186,5 @@ public class ModemManageService {
     public void setJmsSenderSms(JmsTemplate jmsSenderSms) {
         this.jmsSenderSms = jmsSenderSms;
     }
-
-    
 
 }
