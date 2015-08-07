@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:head>
+        <title>Facelet Title</title>
+        <!--<link rel="stylesheet" href="${request.contextPath}/resources/css/sms_login_form.css" type="text/css" media="screen" />-->
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/master_layout_full.xhtml"> 
+            <ui:define name="windowTitle">
+                Home
+            </ui:define>
+            <ui:define name="center">
+                <div class="ui-grid-col-10" id="header_isi">
+                    <p:growl id="modemFormId" showDetail="true" showSummary="true" globalOnly="true" />
+                    <h:form id="modemConfigId">
+                        <div style="margin: 10px">
+                            <p:outputLabel value="Group Phone"  style="font-size: 24px;font-family: Verdana;color: #003333" />
+                            <!--<p:outputLabel value="#{appmsg['modem.modem_configuration_input_form']}"  style="font-size: 11px;margin-left: 5px" />-->
+                        </div>
+                        <p:breadCrumb  style="margin-bottom: 5px;margin-left: 10px;margin-right: 10px;margin-top: 5px">
+                            <p:menuitem value="Home"  url="/protected/home.htm" />
+                            <p:menuitem value="Daftar Group"  url="/protected/phone_group.htm" />
+                        </p:breadCrumb>
+                        <p:focus for="pecarianTxtid" />
+                        <div style="margin-top: 10px;clear: both" />
+                        <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: left">
+                            <p:outputLabel value="#{appmsg['modem.search']}" style="font-weight: bold"/>
+                            <p:outputLabel value=":" style="font-weight: bold"/>
+                            <p:inputText  placeholder="Full Text Service"  style="width: 260px"  id="pecarianTxtid" value="#{groupPhoneController.parameter}"/>
+                            <p:commandButton value="Cari"  icon="ui-icon-search" action="#{groupPhoneController.doSearch()}" update="tableGroupId"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4"  style="margin-left: 10px;margin-right: 10px;margin-top: 10px;margin-bottom: 5px;float: right">
+                            <p:commandButton value="#{appmsg['global.add']}"  icon="ui-icon-plus" action="#{groupPhoneController.doAdd()}"/>
+                        </h:panelGrid>
+                        <div style="clear: both" />
+                        <p:dataTable value="#{groupPhoneController.lazyDataModel}" var="groupPhone" lazy="true" paginator="true" pageLinks="5" paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {PageLinks} {NextPageLink} {LastPageLink}"
+                                     rows="5" rowsPerPageTemplate="5,7,11,15,21,25,31" style="margin: 10px" id="tableGroupId" 
+                                     rowIndexVar="no">
+                            <f:facet name="header">  
+                                <h:outputText value="#{appmsg['sms.task_definition_list']}"/>
+                            </f:facet> 
+                            <p:column style="text-align: center;width: 3%">
+                                <f:facet name="header">  
+                                    <h:outputText  value="No." />
+                                </f:facet>
+                                <h:outputLabel value="#{no+1}." />
+                            </p:column>
+                            <p:column sortBy="#{groupPhone.name}"  style="width: 20%" >
+                                <f:facet name="header">
+                                    <h:outputText value="#{appmsg['global.name']}"/>
+                                </f:facet>
+                                <h:outputLabel value= "#{groupPhone.name}" />
+                            </p:column>
+
+                            <p:column sortBy="name" >
+                                <f:facet name="header">
+                                    <h:outputText value="Deskripsi"/>
+                                </f:facet>
+                                <p:outputLabel value="#{groupPhone.description}" />
+                            </p:column>
+
+                            <p:column headerText="#{appmsg['global.action']}" style="width: 12%;text-align: center" exportable="false">
+                                <p:commandButton  icon="ui-icon-zoomin" title="#{appmsg['global.detail']}" label="#{appmsg['global.detail']}"
+                                                  action="#{groupPhoneController.doDetail()}" style="font-size: 10px!important" >                        
+                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{groupPhoneController.selecetdGroupPhone}" />
+                                </p:commandButton>
+                                - 
+                                <p:commandButton  icon="ui-icon-trash" title="#{appmsg['global.delete']}" label="#{appmsg['global.delete']}"  style="font-size: 10px!important"  
+                                                  onclick="PF('statusDialog').show()"  oncomplete="PF('confirmDialogDelete').show()" >
+                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{groupPhoneController.selecetdGroupPhone}" />
+                                </p:commandButton>
+                                -
+                                <p:commandButton  icon="ui-icon-folder-open" title="#{appmsg['global.edit']}" label="#{appmsg['global.edit']}" style="font-size: 10px!important" 
+                                                  action="#{groupPhoneController.doEdit()}">
+                                    <f:setPropertyActionListener value="#{tastDefinitions}" target="#{groupPhoneController.selecetdGroupPhone}" />
+
+                                </p:commandButton> 
+                            </p:column>        
+                            <f:facet name="footer">
+                                <p:outputLabel value="Total : "/>
+                                <p:outputLabel value="#{groupPhoneController.lazyDataModel.rowCount}"/>
+                                <p:outputLabel value="Data" style="margin-left: 3px"/>
+                            </f:facet>  
+                        </p:dataTable>
+                        <p:messages autoUpdate="true"  style="margin: 10px" />
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+

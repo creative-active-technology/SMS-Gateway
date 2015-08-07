@@ -37,6 +37,8 @@
                             <p:submenu label="Konfigurasi Modem">
                                 <p:menuitem value="Daftar Modem"   title="Daftar Modem" url="/protected/modem_config_view.htm" icon="fa fa-comments-o"  /> 
                                 <p:menuitem value="Modem Form"  url="/protected/modem_config_form.htm"  icon="fa fa-credit-card"  title="Modem Form"/>
+                                <p:menuitem value="Group Phone"  url="/protected/phone_group_view.htm"  icon="fa fa-users"  title="Group Phone"/>
+                                <p:menuitem value="Phone Book"  url="/protected/modem_config_form.htm"  icon="fa fa-book"  title="Modem Form"/>
                             </p:submenu>
                             <p:submenu label="Pengiriman SMS">
                                 <p:menuitem value="Pengiriman SMS"  url="/protected/sending_sms_history.htm"  icon="ui-icon-mail-closed" />
@@ -47,7 +49,7 @@
 
                             <p:submenu label="Account dan User " >
                                 <p:menuitem value="User" url="/protected/account/user_view.htm" icon="ui-icon-person" />
-                                <p:menuitem value="Login History" url="/protected/account/login_history_view.htm" icon="ui-icon-document" />
+                                <p:menuitem value="Login History" url="/protected/account/login_history_view.htm" icon="fa fa-table" />
                                 <p:menuitem value="Logout" url="${request.contextPath}/logout.htm" icon="ui-icon-power" title="Logout" />
                             </p:submenu>
 

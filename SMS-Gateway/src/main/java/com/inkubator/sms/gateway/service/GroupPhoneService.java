@@ -7,11 +7,16 @@ package com.inkubator.sms.gateway.service;
 
 import com.inkubator.datacore.service.IService;
 import com.inkubator.sms.gateway.entity.GroupPhone;
+import java.util.List;
+import org.hibernate.criterion.Order;
 
 /**
  *
  * @author deni.fahri
  */
-public interface GroupPhoneService extends IService<GroupPhone>{
-    
+public interface GroupPhoneService extends IService<GroupPhone> {
+
+    public List<GroupPhone> getAllByFullTextService(String parameter, int first, int pageSize, Order order) throws Exception;
+
+    public Integer getTotalByFullTextService(String parameter) throws Exception;
 }

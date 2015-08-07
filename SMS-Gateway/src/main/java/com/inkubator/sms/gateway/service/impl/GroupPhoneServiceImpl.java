@@ -6,12 +6,17 @@
 package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.dao.GroupPhoneDao;
 import com.inkubator.sms.gateway.entity.GroupPhone;
 import com.inkubator.sms.gateway.service.GroupPhoneService;
 import java.util.List;
 import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -20,6 +25,9 @@ import org.springframework.stereotype.Service;
 @Service(value = "groupPhoneService")
 @Lazy
 public class GroupPhoneServiceImpl extends IServiceImpl implements GroupPhoneService {
+
+    @Autowired
+    private GroupPhoneDao groupPhoneDao;
 
     @Override
     public GroupPhone getEntiyByPK(String id) throws Exception {
@@ -179,6 +187,18 @@ public class GroupPhoneServiceImpl extends IServiceImpl implements GroupPhoneSer
     @Override
     public List<GroupPhone> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<GroupPhone> getAllByFullTextService(String parameter, int first, int pageSize, Order order) throws Exception {
+        return this.groupPhoneDao.getAllByFullTextService(parameter, first, pageSize, order);
+    }
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
+    public Integer getTotalByFullTextService(String parameter) throws Exception {
+        return this.groupPhoneDao.getTotalByFullTextService(parameter);
     }
 
 }
