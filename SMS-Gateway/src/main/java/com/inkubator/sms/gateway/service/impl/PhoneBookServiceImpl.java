@@ -6,12 +6,17 @@
 package com.inkubator.sms.gateway.service.impl;
 
 import com.inkubator.datacore.service.impl.IServiceImpl;
+import com.inkubator.sms.gateway.dao.PhoneBookDao;
 import com.inkubator.sms.gateway.entity.PhoneBook;
 import com.inkubator.sms.gateway.service.PhoneBookService;
 import java.util.List;
 import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -19,7 +24,10 @@ import org.springframework.stereotype.Service;
  */
 @Service(value = "phoneBookService")
 @Lazy
-public class PhoneBookServiceImpl extends IServiceImpl implements PhoneBookService{
+public class PhoneBookServiceImpl extends IServiceImpl implements PhoneBookService {
+
+    @Autowired
+    private PhoneBookDao phoneBookDao;
 
     @Override
     public PhoneBook getEntiyByPK(String id) throws Exception {
@@ -180,5 +188,17 @@ public class PhoneBookServiceImpl extends IServiceImpl implements PhoneBookServi
     public List<PhoneBook> getAllDataPageAbleIsActive(int firstResult, int maxResults, Order order, Byte isActive) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ, propagation = Propagation.SUPPORTS, timeout = 50)
+    public List<PhoneBook> getAllByFullTextService(String parameter, int first, int pageSize, Order order) throws Exception {
+        return this.phoneBookDao.getAllByFullTextService(parameter, first, pageSize, order);
+    }
+
+    @Override
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.SUPPORTS, timeout = 30)
+    public Integer getTotalByFullTextService(String parameter) throws Exception {
+      return this.phoneBookDao.getTotalByFullTextService(parameter);
+    }
+
 }
